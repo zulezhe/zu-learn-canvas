@@ -1,0 +1,105 @@
+<!--
+ * @Author: zulezhe
+ * @Date: 2021-01-13 11:19:20
+ * @LastEditors: zulezhe
+ * @LastEditTime: 2021-01-18 18:13:39
+ * @Description: In User Settings Edit
+ * @FilePath: \canvas\01-基本\02.绘制矩形.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-sizing: border-box;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="canvas-container"></div>
+    <script>
+      window.onload = () => {
+        console.log(ctx);
+        let canvasObj = [];
+        /**
+         * 绘制矩形:
+         *
+         *  rect(x, y, width, height)
+         *
+         */
+        ctx.beginPath();
+        ctx.rect(100, 100, 200, 200);
+        ctx.strokeStyle = "red";
+        ctx.stroke();
+        canvasObj.push(ctx);
+        /**
+         * 绘制矩形
+         * lineTo();
+         *
+         */
+        ctx.beginPath();
+        ctx.moveTo(600, 150);
+        ctx.lineTo(800, 150);
+        ctx.lineTo(800, 400);
+        ctx.lineTo(600, 400);
+        ctx.closePath();
+        ctx.strokeStyle = "red";
+        ctx.stroke();
+        canvasObj.push(ctx);
+
+        /**
+         * 绘制任意不规则图形
+         */
+        let pathList = [
+          { x: 10, y: 190 },
+          { x: 50, y: 150 },
+          { x: 100, y: 190 },
+          { x: 180, y: 160 },
+          { x: 195, y: 10 },
+        ];
+        ctx.beginPath();
+        ctx.moveTo(500, 500);
+        for (let i = 0; i < pathList.length; i++) {
+          const item = pathList[i];
+          ctx.lineTo(item.x, item.y);
+        }
+        ctx.closePath();
+        ctx.strokeStyle = "red";
+        ctx.stroke();
+        canvasObj.push(ctx);
+
+        /**
+         *  判断鼠标是否在图形上
+         * isPointInPath (mx,my)
+         * 只能获取到最后绘制的ctx对象
+         */
+        document.onmousedown = function (event) {
+          // console.log(event, event.pageX, event.pageY);
+          let point = {
+            x: event.pageX,
+            y: event.pageY,
+          };
+          if (ctx.isPointInPath(event.pageX, event.pageY)) {
+            ctx.fillStyle = "#f00";
+          }
+          ctx.fill();
+          console.log(ctx.isPointInPath(event.pageX, event.pageY));
+        };
+      };
+    </script>
+    <script src="./index.js"></script>
+  </body>
+</html>

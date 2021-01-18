@@ -1,0 +1,35 @@
+<!--
+ * @Author: zulezhe
+ * @Date: 2021-01-12 17:53:01
+ * @LastEditors: zulezhe
+ * @LastEditTime: 2021-01-13 11:12:24
+ * @Description: In User Settings Edit
+ * @FilePath: \canvas\01.绘制表格.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+    <style>
+      #canvas-container {
+        width: 100%;
+        height: 100%;
+      }
+      canvas {
+        border: 1px solid red;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="canvas-container"></div>
+    <script type="module">
+      import Wcanvas from "./js/index.js";
+      window.onload = () => {
+        const mycanvas = new Wcanvas();
+        mycanvas.init("canvas-container", 600, 600);
+        mycanvas.draw(45, 1);
+      };
+    </script>
+  </body>
+</html>

@@ -1,0 +1,85 @@
+<!--
+ * @Author: zulezhe
+ * @Date: 2021-01-13 11:19:20
+ * @LastEditors: zulezhe
+ * @LastEditTime: 2021-01-18 18:47:17
+ * @Description: In User Settings Edit
+ * @FilePath: \canvas\01-基本\03.文字绘制.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-sizing: border-box;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="canvas-container"></div>
+    <script>
+      window.onload = () => {
+        /**
+         * 绘制文字:
+         * strokeText(text,x,y,[maxWidth])
+         *
+         */
+        ctx.beginPath();
+        ctx.strokeStyle = "red";
+        ctx.strokeText("strokeText文字", 100, 100);
+
+        /**
+         * 填充文字:
+         * fillText(text, x, y, maxWidth);
+         *
+         */
+        ctx.beginPath();
+        ctx.fillStyle = "red";
+        ctx.fillText("fillText文字", 200, 100);
+
+        /**
+         * 设定宽度:
+         * 超出宽度会被压缩,就像图片一样,变形看不行
+         */
+        ctx.beginPath();
+        ctx.fillStyle = "red";
+        ctx.fillText("fillText文字", 300, 100, 10);
+
+        /**
+         * 设置文字居中
+         * ctx.textAlign='start | left | center | right |end';
+         * ctx.textBaseline='top | hanging | middle | alphabetic | ideographic | bottom';//设置字体底线对齐绘制基线
+         */
+        ctx.beginPath();
+        ctx.fillStyle = "red";
+        ctx.textAlign = "center";
+        ctx.textBaseLine = "bottom";
+        ctx.fillText("textAlign=center文字", 400, 100, 300);
+
+        /**
+         * 设置文字样式
+         * font=文本字体，可设置字体样式的任何值，如font style，font weight，font size，font face等，该属性的值是CSS3字体字符串
+         */
+        ctx.beginPath();
+        ctx.font = "bold 30px strokeStyle";
+        ctx.strokeStyle = "red";
+        ctx.textAlign = "center";
+        ctx.strokeText("textAlign=center文字", 700, 100);
+      };
+    </script>
+    <script src="./index.js"></script>
+  </body>
+</html>

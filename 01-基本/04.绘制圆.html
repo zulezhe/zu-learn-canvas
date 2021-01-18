@@ -1,0 +1,104 @@
+<!--
+ * @Author: zulezhe
+ * @Date: 2021-01-18 16:29:13
+ * @LastEditors: zulezhe
+ * @LastEditTime: 2021-01-18 19:55:09
+ * @Description: In User Settings Edit
+ * @FilePath: \canvas\01-基本\04.绘制圆.html
+-->
+<!--
+ * @Author: zulezhe
+ * @Date: 2021-01-13 11:19:20
+ * @LastEditors: zulezhe
+ * @LastEditTime: 2021-01-18 18:47:17
+ * @Description: In User Settings Edit
+ * @FilePath: \canvas\01-基本\03.文字绘制.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-sizing: border-box;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="canvas-container"></div>
+    <script>
+      window.onload = () => {
+        /**
+         * 绘制圆1
+         * context.arc(x, y, radius, Math.PI / 180 * startAngle, Math.PI / 180 * endAngle, anticlockwise);
+         * x轴坐标,y轴坐标,起始弧度,结束弧度,是否逆时针旋转: false 代表顺时针旋转,0°是从三点钟方向开始的
+         */
+        ctx.beginPath();
+        ctx.arc(300, 300, 150, 0, (Math.PI / 180) * 360, false);
+        ctx.strokeStyle = "red";
+        ctx.stroke();
+
+        /**
+         * 绘制弧线:arcTo   arcTo的作用是绘制介于两条切线之间的弧
+         * ctx.arcTo(x1, y1, x2, y2, radius);
+         * y1是起始点的坐标，x2，y2是终点的坐标，r则是圆弧的半径
+         */
+        ctx.beginPath();
+        ctx.beginPath();
+        ctx.moveTo(20, 20); // 创建开始点
+        ctx.lineTo(100, 20); // 创建水平线
+        ctx.arcTo(150, 20, 150, 70, 50); // 创建弧
+        ctx.lineTo(150, 120); // 创建垂直线
+        ctx.stroke(); // 进行绘制
+
+        /**
+         * 绘制圆弧
+         */
+        ctx.beginPath();
+        ctx.moveTo(500 - 200, 500);
+        ctx.lineTo(500 + 200, 500);
+        ctx.closePath();
+        ctx.strokeStyle = "#000";
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(500, 500 + 200);
+        ctx.lineTo(500, 500 - 200);
+        ctx.closePath();
+        ctx.strokeStyle = "#000";
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.strokeText("起始点", 500 + 90, 500 - 10);
+        ctx.strokeText("中心点", 500, 500 - 10);
+        ctx.strokeText("结束点", 500 - 110, 500 - 10);
+        ctx.arc(500, 500, 100, 0, Math.PI, false); //顺时针
+        ctx.strokeStyle = "red";
+        ctx.stroke();
+
+        /**
+         * 绘制一个带圆角的矩形
+         */
+        ctx.beginPath();
+        ctx.moveTo(600, 600);
+        ctx.lineTo(750, 600);
+        ctx.arcTo(800, 600, 800, 650, 50);
+        ctx.lineTo(800, 850);
+        ctx.strokeStyle = "red";
+        ctx.stroke();
+      };
+    </script>
+    <script src="./index.js"></script>
+  </body>
+</html>
