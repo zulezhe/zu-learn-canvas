@@ -2,7 +2,7 @@
  * @Author: zulezhe
  * @Date: 2021-01-18 16:29:13
  * @LastEditors: zulezhe
- * @LastEditTime: 2021-01-18 19:55:09
+ * @LastEditTime: 2021-01-20 18:00:07
  * @Description: In User Settings Edit
  * @FilePath: \canvas\01-基本\04.绘制圆.html
 -->
@@ -54,6 +54,7 @@
          * 绘制弧线:arcTo   arcTo的作用是绘制介于两条切线之间的弧
          * ctx.arcTo(x1, y1, x2, y2, radius);
          * y1是起始点的坐标，x2，y2是终点的坐标，r则是圆弧的半径
+         * https://codeplayer.vip/p/j7scu
          */
         ctx.beginPath();
         ctx.beginPath();
@@ -96,6 +97,11 @@
         ctx.arcTo(800, 600, 800, 650, 50);
         ctx.lineTo(800, 850);
         ctx.strokeStyle = "red";
+        ctx.stroke();
+
+        // 绘制一个1/4圆,半径为100,逆时针旋转
+        ctx.beginPath();
+        ctx.arc(800, 300, 100, 0, (Math.PI / 180) * 90, true);
         ctx.stroke();
       };
     </script>

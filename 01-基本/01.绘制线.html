@@ -2,7 +2,7 @@
  * @Author: zulezhe
  * @Date: 2021-01-13 11:19:20
  * @LastEditors: zulezhe
- * @LastEditTime: 2021-01-18 17:23:31
+ * @LastEditTime: 2021-01-20 15:54:02
  * @Description: In User Settings Edit
  * @FilePath: \canvas\01-基本\01.绘制线.html
 -->
@@ -57,95 +57,112 @@
         ctx.strokeStyle = "red";
         ctx.stroke();
 
-        // 绘制虚线 ctx.setLineDash(segments);
-        ctx.lineWidth = 4;
-        ctx.strokeStyle = "green";
-        ctx.beginPath();
         /**
+         * 线的末端样式 lineCap='butt | round | square';
+         * butt :连接头为矩形,不会增加,默认值
+         * round:连接头为圆滑的,会在原有线长的基础上增加
+         * square:连接头为矩形,会在原有线长基础上增加
+         * 注意:lineCap在连接处是不生效的
+         */
+
+        // 连接头为buut的线
+        ctx.beginPath();
+        ctx.moveTo(400, 600);
+        ctx.lineTo(600, 600);
+        ctx.lineCap = "butt";
+        ctx.strokeStyle = "blue";
+        ctx.stroke();
+        // 连接头为round的线
+        ctx.beginPath();
+        ctx.moveTo(400, 700);
+        ctx.lineTo(600, 700);
+        ctx.lineCap = "round";
+        ctx.strokeStyle = "blue";
+        ctx.stroke();
+        // 连接头为square的线
+        ctx.beginPath();
+        ctx.moveTo(400, 800);
+        ctx.lineTo(600, 800);
+        ctx.lineCap = "square";
+        ctx.stroke();
+
+        // 参考线
+        ctx.beginPath();
+        ctx.moveTo(600, 400);
+        ctx.lineTo(600, 900);
+
+        ctx.moveTo(400, 400);
+        ctx.lineTo(400, 900);
+        ctx.lineWidth = 0.5;
+        ctx.lineCap = "square";
+        ctx.strokeStyle = "#000";
+        ctx.stroke();
+
+        /**
+         * 线条结合处样式:2 个长度不为 0 的相连部分 ( 线段，圆弧，曲线 )连接处的样式
+         * context.lineJoin='miter | bevel | round';
+         * miter:会根据两条线时自动延长形成一个尖角,会超出原线与线相交的坐标
+         * bevel:两条线相交的时候自动截取成为一个斜面
+         * round: 相交处圆角样式
+         */
+        // 尖角
+        ctx.beginPath();
+        ctx.moveTo(850, 200);
+        ctx.lineTo(900, 300);
+        ctx.lineTo(950, 200);
+        ctx.lineWidth = 10;
+        ctx.strokeStyle = "#000";
+        ctx.lineJoin = "miter";
+        ctx.stroke();
+        // 圆角
+        ctx.beginPath();
+        ctx.moveTo(1000, 200);
+        ctx.lineTo(1050, 300);
+        ctx.lineTo(1100, 200);
+        ctx.lineWidth = 10;
+        ctx.strokeStyle = "#000";
+        ctx.lineJoin = "round";
+        ctx.stroke();
+        // 平角
+        ctx.beginPath();
+        ctx.moveTo(1200, 200);
+        ctx.lineTo(1250, 300);
+        ctx.lineTo(1300, 200);
+        ctx.lineWidth = 10;
+        ctx.strokeStyle = "#000";
+        ctx.lineJoin = "bevel";
+        ctx.stroke();
+        ctx.closePath();
+        // 参考线
+        ctx.beginPath();
+        ctx.moveTo(700, 300);
+        ctx.lineTo(1400, 300);
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = "#000";
+        ctx.stroke();
+
+        /**
+         *  绘制虚线
+         *  ctx.setLineDash(segments);
          * 如果参数只有一个,虚线的间隔和线长是一致的
          * 如果参数为奇数,虚线的间隔就会别复制并重复 [10, 20, 30] 会变成 [10, 20, 30, 10, 20, 30],
          * 如果参数为偶数,则
          */
+        ctx.beginPath();
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = "green";
         ctx.setLineDash([5, 15, 20, 40]);
         ctx.moveTo(400, 200);
         ctx.lineTo(800, 200);
         ctx.stroke();
+        ctx.closePath();
+        ctx.save();
 
-        // 获取虚线间隔:getLineDash();
+        /**
+         * 获取虚线间隔:getLineDash();
+         */
         console.log(ctx.getLineDash()); //[5, 15, 20, 40]
       };
-      // class Wcanvas {
-      //   constructor(el, width, height) {
-      //     this.canvas = document.createElement("canvas");
-      //     this.ctx = this.canvas.getContext("2d");
-      //     this.canvas.width = width;
-      //     this.canvas.height = height;
-      //     document.getElementById(el).appendChild(this.canvas);
-      //   }
-      //   drawLine(params = { path: [{ x: 100, y: 100 }], lineWidth: 1, lineColor: "red", type: "solid", lineDash: [20] }) {
-      //     this.ctx.beginPath();
-      //     this.ctx.moveTo(params.path[0].x, params.path[0].y);
-      //     params.path.map((item) => {
-      //       this.ctx.lineTo(item.x - 0.5, item.y - 0.5);
-      //       this.ctx.lineWidth = params.lineWidth;
-      //       this.ctx.strokeStyle = params.lineColor;
-      //     });
-      //     this.ctx.stroke();
-      //   }
-      //   drawRect(lineWidth = 2, linieColor = "red", x = 10, y = 10, width = 100, height = 100, fill = true, fillStyle = "yellow") {
-      //     this.ctx.beginPath();
-      //     this.ctx.rect(x, y, width, height);
-      //     this.ctx.lineWidth = lineWidth;
-      //     this.ctx.strokeStyle = linieColor;
-      //     if (fill) {
-      //       this.ctx.fillStyle = fillStyle;
-      //       this.ctx.fill();
-      //     }
-      //     this.ctx.stroke();
-      //   }
-      //   drawAct(params) {
-      //     // ctx.arc(x, y, radius, startAngle, endAngle, Boolean)
-      //     // 圆心坐标: (x, y)
-      //     // 半径: radius
-      //     // 起始角度: startAngle
-      //     // 结束角度: endAngle
-      //     // 是否逆时针旋转: false 代表顺时针旋转
-      //     this.ctx.beginPath();
-      //     this.ctx.lineWidth = params.lineWidth;
-      //     this.ctx.strokeStyle = params.lineColor;
-      //     this.ctx.arc(params.x, params.y, params.radius, params.startAngle, params.endAngle, params.isCCW);
-      //     this.ctx.stroke();
-      //   }
-      // }
-      // const mycanvas = new Wcanvas("canvas-container", 400, 400);
-      // mycanvas.drawLine({
-      //   path: [
-      //     { x: 10, y: 190 },
-      //     { x: 50, y: 150 },
-      //     { x: 100, y: 190 },
-      //     { x: 180, y: 160 },
-      //     { x: 195, y: 10 },
-      //   ],
-      // });
-      // mycanvas.drawRect();
-      // mycanvas.drawAct({
-      //   x: 100,
-      //   y: 250,
-      //   radius: 40,
-      //   startAngle: 0,
-      //   endAngle: Math.PI * 2,
-      //   isCCW: false,
-      // });
-      // mycanvas.drawAct({
-      //   lineWidth: 1,
-      //   lineColor: "red",
-      //   x: 200,
-      //   y: 250,
-      //   radius: 40,
-      //   startAngle: 0,
-      //   endAngle: Math.PI * 1,
-      //   isCCW: true,
-      // });
     </script>
     <script src="./index.js"></script>
   </body>

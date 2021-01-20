@@ -2,7 +2,7 @@
  * @Author: zulezhe
  * @Date: 2021-01-13 11:19:20
  * @LastEditors: zulezhe
- * @LastEditTime: 2021-01-18 18:47:17
+ * @LastEditTime: 2021-01-20 16:28:11
  * @Description: In User Settings Edit
  * @FilePath: \canvas\01-基本\03.文字绘制.html
 -->
@@ -78,6 +78,13 @@
         ctx.strokeStyle = "red";
         ctx.textAlign = "center";
         ctx.strokeText("textAlign=center文字", 700, 100);
+
+        /**
+         * 绘制一个新文字
+         */
+        ctx.beginPath();
+        ctx.fillText("绘制一个新文字", 300, 400);
+        ctx.strokeText("绘制一个新文字", 300, 500);
       };
     </script>
     <script src="./index.js"></script>

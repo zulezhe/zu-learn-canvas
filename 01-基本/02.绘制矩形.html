@@ -2,7 +2,7 @@
  * @Author: zulezhe
  * @Date: 2021-01-13 11:19:20
  * @LastEditors: zulezhe
- * @LastEditTime: 2021-01-18 18:13:39
+ * @LastEditTime: 2021-01-20 16:20:03
  * @Description: In User Settings Edit
  * @FilePath: \canvas\01-基本\02.绘制矩形.html
 -->
@@ -33,7 +33,6 @@
     <script>
       window.onload = () => {
         console.log(ctx);
-        let canvasObj = [];
         /**
          * 绘制矩形:
          *
@@ -44,9 +43,8 @@
         ctx.rect(100, 100, 200, 200);
         ctx.strokeStyle = "red";
         ctx.stroke();
-        canvasObj.push(ctx);
         /**
-         * 绘制矩形
+         * 根据路径绘制矩形
          * lineTo();
          *
          */
@@ -58,7 +56,6 @@
         ctx.closePath();
         ctx.strokeStyle = "red";
         ctx.stroke();
-        canvasObj.push(ctx);
 
         /**
          * 绘制任意不规则图形
@@ -79,25 +76,23 @@
         ctx.closePath();
         ctx.strokeStyle = "red";
         ctx.stroke();
-        canvasObj.push(ctx);
 
         /**
-         *  判断鼠标是否在图形上
-         * isPointInPath (mx,my)
-         * 只能获取到最后绘制的ctx对象
+         * 填充矩形
+         * ctx.fillRect();
          */
-        document.onmousedown = function (event) {
-          // console.log(event, event.pageX, event.pageY);
-          let point = {
-            x: event.pageX,
-            y: event.pageY,
-          };
-          if (ctx.isPointInPath(event.pageX, event.pageY)) {
-            ctx.fillStyle = "#f00";
-          }
-          ctx.fill();
-          console.log(ctx.isPointInPath(event.pageX, event.pageY));
-        };
+        ctx.beginPath();
+        ctx.fillStyle = "blue";
+        ctx.fillRect(200, 600, 200, 200);
+        ctx.fillStyle = "rgba(237,125,37,.7)";
+        ctx.fillRect(300, 700, 200, 200);
+        /**
+         * 描边矩形:
+         * context.strokeRect(x, y, width, height);
+         */
+        ctx.beginPath();
+        ctx.strokeStyle = "purple";
+        ctx.strokeRect(600, 500, 300, 300);
       };
     </script>
     <script src="./index.js"></script>
