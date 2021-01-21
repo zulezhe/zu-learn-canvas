@@ -1,0 +1,187 @@
+<!--
+ * @Author: zulezhe
+ * @Date: 2021-01-21 11:19:43
+ * @LastEditors: zulezhe
+ * @LastEditTime: 2021-01-21 18:28:57
+ * @Description: In User Settings Edit
+ * @FilePath: \canvas\01-基本\05.绘制圆角矩形.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>绘制圆角矩形</title>
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-sizing: border-box;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      #canvas-container {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+      }
+      canvas {
+        border: 1px solid red;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="canvas-container"></div>
+    <script>
+      window.onload = () => {
+        learnArcTo();
+        const context = canvasInit("canvas-container");
+        drawRoundRect(context, 800, 200, 400, 300, 50, "blue");
+      };
+      /**
+       * @description: canvas初始化
+       * @param {*} el
+       * @param {*} width
+       * @param {*} height
+       * @return {*}
+       */
+      function canvasInit(el, width, height) {
+        var canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
+        document.getElementById(el).appendChild(canvas);
+        canvas.width = document.body.clientWidth - 50;
+        canvas.height = document.body.clientHeight - 50;
+        return context;
+      }
+
+      /**
+       * @description: 画圆角矩形
+       * @param {*} context
+       * @return {*}x
+       * @return {*}y
+       * @return {*}w 矩形的宽度
+       * @return {*}h 矩形的高度
+       * @mark 顺时针绘制
+       */
+      function drawRoundRect(context, x, y, w, h, r, color) {
+        context.save();
+        context.beginPath(0);
+        context.strokeStyle = color;
+
+        // 上横线
+        context.moveTo(x, y);
+        context.lineTo(x + w - r, y);
+        // 右上圆角
+        // context.arc(x + w - r, y + r, r, (Math.PI * 3) / 2, Math.PI * 2, false);
+        context.arc(x + w - r, y + r, r, (Math.PI / 180) * 270, Math.PI * 2, false);
+
+        // 右侧竖线
+        context.moveTo(x + w, y + r);
+        context.lineTo(x + w, y + h - r);
+        // 右下圆角
+        context.arc(x + w - r, y + h - r, r, 0, (Math.PI / 180) * 90, false);
+
+        // 下横线
+        context.moveTo(x + w - r, y + h);
+        context.lineTo(x, y + h);
+        // 左下圆角
+        context.arc(x, y + h - r, r, 90, (Math.PI / 180) * 180, false);
+
+        // 左侧竖线
+        context.moveTo(x - r, y + h - r);
+        context.lineTo(x - r, y + r);
+        // 左上圆角
+        context.arc(x, y + r, r, (Math.PI / 180) * 180, (Math.PI / 180) * 270, false);
+        context.stroke();
+        context.restore();
+      }
+
+      function learnArcTo() {
+        /**
+         * 使用context.arc()实现
+         */
+        ctx.beginPath();
+        ctx.moveTo(100, 200); //起始点
+        ctx.strokeStyle = "#000";
+        ctx.fillText("(100, 200)", 100, 200);
+        ctx.lineTo(350, 200); // 第一条线移动终点
+        ctx.fillText("(350, 200)", 350, 200);
+        /**
+         * 圆角的x轴坐标=lineTo的x轴坐标-半径长度
+         *
+         * 圆角的y轴坐标=lineTo的y轴坐标+半径长度
+         *
+         * 圆角半径r
+         *
+         * 圆角起始角度,一般为0
+         *
+         * 圆角终角度,0度在15点钟方向,顺时针递增
+         *
+         * 是否是顺时针
+         *
+         */
+        ctx.arc(350, 250, 50, 0, (Math.PI / 180) * 270, true);
+        ctx.strokeStyle = "#000";
+        ctx.stroke();
+
+        // =============辅助线开始================
+        ctx.beginPath(); // 第一条线移动终点
+        ctx.moveTo(350, 600);
+        ctx.lineTo(350, 100); // 第一条线移动终点
+
+        ctx.moveTo(0, 250);
+        ctx.lineTo(650, 250); // 第一条线移动终点
+
+        ctx.moveTo(0, 400);
+        ctx.lineTo(650, 400); // 第一条线移动终点
+        ctx.fillText("(350, 250)", 350, 250);
+        // =============辅助线结束================
+
+        //============= 右下角圆角=============
+        ctx.fillStyle = "red";
+        ctx.moveTo(400, 250);
+        ctx.lineTo(400, 400);
+        ctx.fillText("(400,400)", 400, 400);
+        ctx.arc(350, 400, 50, 0, (Math.PI / 180) * 90, false);
+        ctx.fillText("(350, 400)", 350, 400);
+        ctx.fillRect(350 - 5 / 2, 400 - 5 / 2, 5, 5);
+        //==============底部横线================
+        ctx.moveTo(350, 450);
+        ctx.lineTo(100, 450);
+
+        //==============辅助线开始==============
+        ctx.moveTo(100, 50);
+        ctx.lineTo(100, 650);
+        ctx.fillRect(100 - 5 / 2, 400 - 5 / 2, 5, 5);
+        ctx.fillText("(100, 400)", 100, 400);
+
+        //==============辅助线结束==============
+
+        // ============左下角圆角==============
+        ctx.moveTo(100, 450);
+        ctx.arc(100, 400, 50, 90, (Math.PI / 180) * 180, false);
+
+        // ============左侧横线===============
+        ctx.moveTo(50, 400);
+        ctx.lineTo(50, 250);
+
+        ctx.fillRect(100 - 5 / 2, 250 - 5 / 2, 5, 5);
+        ctx.fillText("(100, 250)", 100, 250);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(100, 250);
+        ctx.arc(100, 250, 50, 180, (Math.PI / 180) * 270, false);
+
+        ctx.stroke();
+      }
+    </script>
+  </body>
+  <script src="./index.js"></script>
+</html>
