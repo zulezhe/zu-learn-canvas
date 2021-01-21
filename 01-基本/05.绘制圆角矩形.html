@@ -2,7 +2,7 @@
  * @Author: zulezhe
  * @Date: 2021-01-21 11:19:43
  * @LastEditors: zulezhe
- * @LastEditTime: 2021-01-21 18:28:57
+ * @LastEditTime: 2021-01-21 18:40:33
  * @Description: In User Settings Edit
  * @FilePath: \canvas\01-基本\05.绘制圆角矩形.html
 -->
@@ -41,8 +41,11 @@
     <script>
       window.onload = () => {
         learnArcTo();
+        // 使用arc绘制圆角矩形
         const context = canvasInit("canvas-container");
         drawRoundRect(context, 800, 200, 400, 300, 50, "blue");
+
+        // 使用arcTo绘制圆角矩形
       };
       /**
        * @description: canvas初始化
