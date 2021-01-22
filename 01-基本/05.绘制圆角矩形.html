@@ -2,7 +2,7 @@
  * @Author: zulezhe
  * @Date: 2021-01-21 11:19:43
  * @LastEditors: zulezhe
- * @LastEditTime: 2021-01-21 18:59:18
+ * @LastEditTime: 2021-01-22 18:25:21
  * @Description: In User Settings Edit
  * @FilePath: \canvas\01-基本\05.绘制圆角矩形.html
 -->
@@ -43,7 +43,8 @@
         learnArcTo();
         // 使用arc绘制圆角矩形
         const context = canvasInit("canvas-container");
-        drawRoundRect(context, 800, 200, 400, 300, 50, "blue");
+        drawRoundRect(context, 800, 200, 500, 300, 50, "blue");
+        drawRoundRectForArcTo(context, 800, 600, 400, 200, 50, "red");
 
         // 使用arcTo绘制圆角矩形
       };
@@ -105,10 +106,26 @@
         context.restore();
       }
 
-      function drawRoundRectForArcTo() {
+      function drawRoundRectForArcTo(ctx, x, y, w, h, r, color) {
         ctx.beginPath();
-        ctx.moveTo(800, 600);
-        ctx.lineTo(1000, 400);
+        ctx.strokeStyle = color || "#000";
+        ctx.moveTo(x, y);
+        ctx.lineTo(x + w, y);
+
+        // 右上角弧线
+        ctx.arcTo(x + w + r, y, x + w + r, y + r, r);
+        // 右侧竖线
+        ctx.lineTo(x + w + r, y + h);
+        // 右下角圆角
+        ctx.arcTo(x + w + r, y + h + r, x + w, y + h + r, r);
+        // 下部横线
+        ctx.lineTo(x + w, y + h + r);
+        // 左下圆角
+        ctx.arcTo(x - r, y + h + r, x - r, y + h, r);
+        // 左侧竖线
+        ctx.lineTo(x - r, y + r);
+        // 左上圆角
+        ctx.arcTo(x - r, y, x, y, r);
         ctx.stroke();
       }
       function learnArcTo() {
