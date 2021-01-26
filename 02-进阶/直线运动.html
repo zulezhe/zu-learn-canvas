@@ -1,0 +1,91 @@
+<!--
+ * @Author: zulezhe
+ * @Date: 2021-01-26 14:02:43
+ * @LastEditors: zulezhe
+ * @LastEditTime: 2021-01-26 14:03:19
+ * @Description: In User Settings Edit
+ * @FilePath: \canvas\02-进阶\直线运动.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>直线运动</title>
+  </head>
+  <body>
+    <canvas id="canvas" width="600" height="300" style="background: #000"></canvas>
+
+    <script>
+      function Ball() {
+        this.x = 0;
+        this.y = 0;
+        this.radius = 10; // 半径
+        this.fillStyle = "#abcdef";
+      }
+
+      Ball.prototype.draw = function (context) {
+        context.save();
+        context.beginPath();
+        context.fillStyle = this.fillStyle;
+        context.strokeStyle = "transparent";
+        context.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, false);
+        context.stroke();
+        context.fill();
+        context.restore();
+      };
+    </script>
+    <script>
+      window.onload = function () {
+        var canvas = document.getElementById("canvas");
+        var context = canvas.getContext("2d");
+        var ballObj = [];
+
+        for (var i = 0; i < 30; i++) {
+          var ball = new Ball();
+          ball.x = canvas.width * Math.random();
+          ball.y = canvas.height * Math.random();
+          ball.radius = 3;
+          ball.fillStyle = changeColor();
+          ball.vx = Math.random() * 2;
+          ball.vy = Math.random() * 1;
+          ballObj.push(ball);
+        }
+
+        //            var vx = Math.random() * 2; // 水平速度
+        //            var vy = Math.random() * 1; // 垂直速度
+
+        //            var speed = 5;
+        //            var angle = 30;
+
+        function changeColor() {
+          return `rgba(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255},1)`;
+        }
+
+        (function drawFrame() {
+          window.requestAnimationFrame(drawFrame);
+
+          context.fillStyle = "rgba(0,0,0,.1)";
+          context.fillRect(0, 0, canvas.width, canvas.height);
+
+          // cos 临边/斜边 vx/speed   sin 对边/斜边 vy/speed
+          //                var vx = Math.cos(angle * Math.PI/180) * speed;
+          //                var vy = Math.sin(angle * Math.PI/180) * speed;
+          for (var i = 0; i < ballObj.length; i++) {
+            if (ballObj[i].x > canvas.width - ballObj[i].radius || ballObj[i].x < ball.radius) {
+              ballObj[i].vx = -ballObj[i].vx;
+              ballObj[i].fillStyle = changeColor();
+            }
+            if (ballObj[i].y > canvas.height - ballObj[i].radius || ballObj[i].y < ball.radius) {
+              ballObj[i].vy = -ballObj[i].vy;
+              ballObj[i].fillStyle = changeColor();
+            }
+
+            ballObj[i].x += ballObj[i].vx;
+            ballObj[i].y += ballObj[i].vy;
+            ballObj[i].draw(context);
+          }
+        })();
+      };
+    </script>
+  </body>
+</html>

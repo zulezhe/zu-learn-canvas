@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>矩形选取框</title>
+  </head>
+  <body>
+    <p><input type="button" value="reset" id="reset" /></p>
+
+    <canvas id="canvas" width="800" height="520"></canvas>
+
+    <script>
+      var canvas = document.getElementById("canvas"),
+        context = canvas.getContext("2d"),
+        resetButton = document.getElementById("reset"),
+        image = new Image();
+      imageData, (mousedown = {});
+      (rebberbandRectangle = {}), (dragging = false);
+
+      function windowToCanvas(canvas, x, y) {
+        var canvasRectangle = canvas.getBoundingClientRect();
+        return {
+          x: x - canvasRectangle.left,
+          y: y - canvasRectangle.top,
+        };
+      }
+
+      function captureRubberbandPixels() {
+        imageData = context.getImageData(rebberbandRectangle.left, rubberbandRectangle.top, rebberbandRectangle.width, rebberbandRectangle.height);
+      }
+
+      function restoreRubberbandPixels() {
+        context.putImageData(imageData, rubberbandRectangle.left, rubberbandRectangle.top);
+      }
+    </script>
+  </body>
+</html>

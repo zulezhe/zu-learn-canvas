@@ -1,0 +1,206 @@
+<!--
+ * @Author: zulezhe
+ * @Date: 2021-01-26 14:06:31
+ * @LastEditors: zulezhe
+ * @LastEditTime: 2021-01-26 14:06:32
+ * @Description: In User Settings Edit
+ * @FilePath: \canvas\02-进阶\自由线段.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Canvas</title>
+    <style>
+      body {
+        background: #eee;
+      }
+      #controls {
+        position: absolute;
+        left: 25px;
+        top: 25px;
+      }
+      #canvas {
+        background-color: #fff;
+        cursor: pointer;
+        margin-left: 10px;
+        margin-top: 10px;
+        box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas" width="600" height="400"></canvas>
+    <div id="controls">
+      线段颜色:
+      <select id="strokeStyleSelect">
+        <option value="red">red</option>
+        <option value="green">green</option>
+        <option value="blue">blue</option>
+        <option value="orange">orange</option>
+        <option value="goldenrod">goldenrod</option>
+        <option value="navy">navy</option>
+        <option value="purple">purple</option>
+      </select>
+
+      选项：
+      <input type="checkbox" checked id="guidewire" />
+      <input type="button" value="清空画布" id="earseAll" />
+    </div>
+
+    <script>
+      var canvas = document.getElementById("canvas");
+      var context = canvas.getContext("2d");
+      var earseAllButton = document.getElementById("earseAll");
+      var strokeStyleSelect = document.getElementById("strokeStyleSelect");
+      var guidewire = document.getElementById("guidewire");
+      var drawingImageData = {};
+      var rubberbandRect = {};
+      var mousedown = {};
+      var dragging = false;
+      var guidewires = guidewire.checked;
+
+      function drawGrid(context, color, stepx, stepy) {
+        context.strokeStyle = color;
+        context.lineWidth = 0.5;
+
+        while (stepx <= canvas.width) {
+          context.beginPath();
+          context.moveTo(stepx, 0);
+          context.lineTo(stepx, canvas.height);
+          context.stroke();
+          stepx += 10.5;
+        }
+        while (stepy <= canvas.height) {
+          context.beginPath();
+          context.moveTo(0, stepy);
+          context.lineTo(canvas.width, stepy);
+          context.stroke();
+          stepy += 10.5;
+        }
+      }
+
+      function windowToCanvas(x, y) {
+        var bbox = canvas.getBoundingClientRect();
+        return { x: x - bbox.left * (canvas.width / bbox.width), y: y - bbox.top * (canvas.height / bbox.height) };
+      }
+
+      // 缓存当前信息
+      function saveDrawingSurface() {
+        drawingImageData = context.getImageData(0, 0, canvas.width, canvas.height);
+      }
+
+      // 释放当前信息
+      function restoreDrawingSurface() {
+        context.putImageData(drawingImageData, 0, 0);
+      }
+
+      function updateRubberbandRectangle(loc) {
+        rubberbandRect.width = Math.abs(loc.x - mousedown.x);
+        rubberbandRect.height = Math.abs(loc.y - mousedown.y);
+
+        if (loc.x > mousedown.x) rubberbandRect.left = mousedown.x;
+        else rubberbandRect.left = loc.x;
+
+        if (loc.y > mousedown.y) rubberbandRect.top = mousedown.y;
+        else rubberbandRect.top = loc.y;
+      }
+
+      function drawRubberbandShape(loc) {
+        context.beginPath();
+        context.lineWidth = 2;
+        context.moveTo(mousedown.x, mousedown.y);
+        context.lineTo(loc.x, loc.y);
+        context.stroke();
+      }
+
+      function updateRubberband(loc) {
+        updateRubberbandRectangle(loc);
+        drawRubberbandShape(loc);
+      }
+
+      // 提示线
+      function drawHorizontalLine(y) {
+        context.beginPath();
+        context.moveTo(0, y + 0.5);
+        context.lineTo(canvas.width, y + 0.5);
+        context.stroke();
+      }
+
+      function drawVerticalLine(x) {
+        context.beginPath();
+        context.moveTo(x + 0.5, 0);
+        context.lineTo(x + 0.5, canvas.height);
+        context.stroke();
+      }
+
+      function drawGuideWires(x, y) {
+        context.save();
+        context.strokeStyle = "rgba(0,0,230,0.4)";
+        context.lineWidth = 0.5;
+        drawVerticalLine(x);
+        drawHorizontalLine(y);
+        context.restore();
+      }
+
+      // 事件处理
+      canvas.addEventListener(
+        "mousedown",
+        function (e) {
+          var loc = windowToCanvas(e.clientX, e.clientY);
+          e.preventDefault();
+          saveDrawingSurface();
+          mousedown.x = loc.x;
+          mousedown.y = loc.y;
+          dragging = true;
+        },
+        false
+      );
+      canvas.addEventListener(
+        "mousemove",
+        function (e) {
+          var loc;
+          if (dragging) {
+            e.preventDefault();
+            loc = windowToCanvas(e.clientX, e.clientY);
+            restoreDrawingSurface();
+            updateRubberband(loc);
+
+            if (guidewires) {
+              drawGuideWires(loc.x, loc.y);
+            }
+          }
+        },
+        false
+      );
+
+      canvas.addEventListener(
+        "mouseup",
+        function (e) {
+          var loc = windowToCanvas(e.clientX, e.clientY);
+          restoreDrawingSurface();
+          updateRubberband(loc);
+          dragging = false;
+        },
+        false
+      );
+
+      earseAllButton.onclick = function (e) {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        drawGrid(context, "lightgray", 10, 10);
+        saveDrawingSurface();
+      };
+
+      strokeStyleSelect.onchange = function (e) {
+        context.strokeStyle = strokeStyleSelect.value;
+      };
+
+      guidewire.onchange = function (e) {
+        guidewires = guidewire.checked;
+      };
+
+      context.strokeStyle = strokeStyleSelect.value;
+      drawGrid(context, "lightgray", 10, 10);
+    </script>
+  </body>
+</html>

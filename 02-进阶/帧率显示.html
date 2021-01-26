@@ -1,0 +1,139 @@
+<!--
+ * @Author: zulezhe
+ * @Date: 2021-01-26 13:57:12
+ * @LastEditors: zulezhe
+ * @LastEditTime: 2021-01-26 13:58:32
+ * @Description: In User Settings Edit
+ * @FilePath: \canvas\02-进阶\帧率显示.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <canvas id="canvas"></canvas>
+    <button id="animationButton">按钮</button>
+    <script>
+      var canvas = document.getElementById("canvas"),
+        ctx = canvas.getContext("2d"),
+        paused = true,
+        discs = [
+          {
+            x: 150,
+            y: 250,
+            lastX: 150,
+            lastY: 250,
+            velorityX: -3.2,
+            velorityY: 3.5,
+            radius: 50,
+            innerColor: "rgba(255,100,0,1)",
+            middleColor: "rgba(255,100,100,0.7)",
+            outerColor: "rgba(255,255,255,0.5)",
+            strokeStyle: "green",
+          },
+          {
+            x: 150,
+            y: 75,
+            lastX: 150,
+            lastY: 75,
+            velorityX: 1.2,
+            velorityY: 1.5,
+            radius: 25,
+            innerColor: "rgba(255,0,0,1)",
+            middleColor: "rgba(255,0,255,0.7)",
+            outerColor: "rgba(255,255,0,0.5)",
+            strokeStyle: "orange",
+          },
+        ],
+        numDiscs = discs.length,
+        animationButton = document.getElementById("animationButton");
+
+      function drawBackground() {}
+      function update() {
+        var disc = null;
+
+        for (var i = 0; i < numDiscs; i++) {
+          disc = discs[i];
+          if (disc.x + disc.velorityX + disc.radius > canvas.width || disc.x + disc.velorityX - disc.radius < 0) disc.velorityX = -disc.velorityX;
+          if (disc.y + disc.velorityY + disc.radius > canvas.height || disc.y + disc.velorityY - disc.radius < 0) disc.velorityY = -disc.velorityY;
+          disc.x += disc.velorityX;
+          disc.y += disc.velorityY;
+        }
+      }
+
+      function draw() {
+        var disc = discs[i];
+        for (var i = 0; i < numDiscs; i++) {
+          disc = discs[i];
+          gradient = ctx.createRadialGradient(disc.x, disc.y, 0, disc.x, disc.y, disc.radius); //放射渐变
+          gradient.addColorStop(0.3, disc.innerColor);
+          gradient.addColorStop(0.5, disc.middleColor);
+          gradient.addColorStop(1.0, disc.outerColor);
+
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(disc.x, disc.y, disc.radius, 0, Math.PI * 2, false);
+          ctx.fillStyle = gradient;
+          ctx.strokeStyle = disc.strokeStyle;
+          ctx.fill();
+          ctx.stroke();
+          ctx.restore();
+        }
+      }
+
+      //calculate frame rate
+      var lastTime = 0;
+      function calculateFps() {
+        var now = +new Date(),
+          fps = 1000 / (now - lastTime);
+        lastTime = now;
+        return fps;
+      }
+
+      //以不同的帧速率来执行不同的任务
+      var lastFpsUpdateTime = 0,
+        lastFpsUpdate = 0;
+
+      //Animation
+      function animate(time) {
+        var fps = 0;
+        if (time == undefined) {
+          time = +new Date(); //+new Date()是一个东西;  +相当于.valueOf();
+        }
+        if (!paused) {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          //drawBackground();
+          update();
+          draw();
+          var now = +new Date();
+          //console.log(now);
+          fps = calculateFps();
+          if (now - lastFpsUpdateTime > 1000) {
+            lastFpsUpdateTime = now;
+            lastFpsUpdate = fps;
+          }
+          ctx.fillStyle = "cornflowerblue";
+          ctx.fillText(lastFpsUpdate.toFixed() + " fps", 20, 60);
+          window.requestAnimationFrame(animate);
+        }
+      }
+
+      //event handlers
+      animationButton.onclick = function (e) {
+        paused = paused ? false : true;
+        if (paused) {
+          animationButton.value = "Animate";
+        } else {
+          window.requestAnimationFrame(animate);
+          animationButton.value = "Pause";
+        }
+      };
+
+      //Initialization
+      ctx.font = "48px Helvetica";
+    </script>
+  </body>
+</html>

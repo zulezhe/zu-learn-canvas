@@ -2,7 +2,7 @@
  * @Author: zulezhe
  * @Date: 2021-01-14 08:36:09
  * @LastEditors: zulezhe
- * @LastEditTime: 2021-01-18 10:48:22
+ * @LastEditTime: 2021-01-22 19:17:03
  * @Description: In User Settings Edit
  * @FilePath: \canvas\01-基本\README.md
 -->
@@ -54,3 +54,13 @@ ctx.arc(x, y, radius, startAngle, endAngle, Boolean)
 - 绘制一个正圆
 
 - 绘制一个圆弧
+
+## 弧度和角度
+
+> 1rad=Math.PI/180\*1°
+
+$ sin$
+
+$ a\over b $
+
+## 三角函数

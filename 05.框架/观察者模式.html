@@ -1,0 +1,75 @@
+<!--
+ * @Author: zulezhe
+ * @Date: 2021-01-26 14:34:30
+ * @LastEditors: zulezhe
+ * @LastEditTime: 2021-01-26 14:38:59
+ * @Description: In User Settings Edit
+ * @FilePath: \canvas\05.框架\观察者模式.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 观察者模式
+      // 之前已经写过发布订阅模式了，好多时候感觉这两个模式是一样的，先聊一下区别，
+      // 好多时候可以说观察者模式和发布订阅是一样的,其实是有区别的。
+      // 发布订阅模式 发布和订阅是相互解耦的 需要有一个事件通道，观察者是直接订阅目标事件是耦合的
+      // 观察者模式实现
+
+      // 订阅者也是被观察者
+      class Subject {
+        constructor(name) {
+          this.name = name;
+          // 添加默认状态
+          this.state = "成功";
+          this.subs = []; //和发布订阅模式一样 收集函数事件的一个集合
+        }
+        // 添加订阅
+        //sub 观察者对象
+        addSub(sub) {
+          this.subs.push(sub);
+        }
+        // 通知观察者
+        notify(newState) {
+          // 更新状态
+          this.state = newState;
+          // 遍历收集的观察者集合，触发观察者的update更新被观察者状态
+          this.subs.forEach((sub) => {
+            sub.update(this);
+          });
+        }
+      }
+      //  观察者
+      class Observer {
+        constructor(name) {
+          // 添加一个名字方便后续test
+          this.name = name;
+        }
+        // 被观察对象 sub
+        update(sub) {
+          // 打印被观察者状态
+          console.log(this.name + "收到了通知，被观察者最新状态是" + sub.state);
+        }
+      }
+      // test
+      // 创建观察者
+      let a = new Observer("a");
+      let b = new Observer("b");
+      // 实例化被观察者
+      let sub = new Subject();
+      // 被观察者添加观察者
+      sub.addSub(a);
+      sub.addSub(b);
+      // 修改被观察者状态并通知观察者
+      sub.notify("失败了");
+      // 打印结果：
+      // a收到了通知， 被观察者最新状态是失败了
+      // b收到了通知， 被观察者最新状态是失败了
+    </script>
+  </body>
+</html>

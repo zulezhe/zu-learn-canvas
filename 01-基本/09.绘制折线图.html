@@ -1,0 +1,153 @@
+<!--
+ * @Author: zulezhe
+ * @Date: 2021-01-13 14:04:30
+ * @LastEditors: zulezhe
+ * @LastEditTime: 2021-01-26 18:26:55
+ * @Description: In User Settings Edit
+ * @FilePath: \canvas\01-基本\09.绘制折线图.html
+-->
+<!--
+ * @Author: zulezhe
+ * @Date: 2021-01-13 14:04:15
+ * @LastEditors: zulezhe
+ * @LastEditTime: 2021-01-20 19:12:50
+ * @Description: In User Settings Edit
+ * @FilePath: \canvas\01-基本\05.绘制安卓机器人.html
+-->
+<!--
+ * @Author: zulezhe
+ * @Date: 2021-01-18 16:29:13
+ * @LastEditors: zulezhe
+ * @LastEditTime: 2021-01-20 16:31:36
+ * @Description: In User Settings Edit
+ * @FilePath: \canvas\01-基本\04.绘制圆.html
+-->
+<!--
+ * @Author: zulezhe
+ * @Date: 2021-01-13 11:19:20
+ * @LastEditors: zulezhe
+ * @LastEditTime: 2021-01-18 18:47:17
+ * @Description: In User Settings Edit
+ * @FilePath: \canvas\01-基本\03.文字绘制.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>绘制折线图</title>
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-sizing: border-box;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      #canvas-container {
+        width: 100%;
+        height: 100%;
+        border: 1px solid red;
+        position: absolute;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="canvas-container">
+      <canvas id="canvas"></canvas>
+    </div>
+    <script>
+      window.onload = () => {
+        let drawPolyLine = new DrawmPolyline(document.getElementById("canvas"), { x: 300, y: 800 }, 500);
+        drawPolyLine.init(1, "red");
+        drawPolyLine.drawArrow(10, 20);
+        // drawPolyLine.drawDootted(400, 500, 4, "red");
+        drawPolyLine.drawPolyLine([
+          {
+            x: 400,
+            y: 500,
+          },
+          {
+            x: 500,
+            y: 600,
+          },
+          {
+            x: 600,
+            y: 400,
+          },
+          "red",
+        ]);
+      };
+      class DrawmPolyline {
+        constructor(CanvasDom, startDot, axisLen) {
+          this.startDot = startDot;
+          this.axisLen = axisLen;
+          this.CanvasDom = CanvasDom;
+          this.CanvasDom.width = axisLen * 10;
+          this.CanvasDom.height = axisLen * 10;
+          console.log(this.CanvasDom);
+          this.ctx = CanvasDom.getContext("2d");
+        }
+        init(lineWidth = 1, lineColor = "red") {
+          this.ctx.save();
+          this.ctx.lineWidth = lineWidth;
+          this.ctx.strokeStyle = lineColor;
+          // x轴
+          this.ctx.moveTo(this.startDot.x, this.startDot.y);
+          this.ctx.lineTo(this.axisLen + this.startDot.x, this.startDot.y);
+          // y轴
+          this.ctx.moveTo(this.startDot.x, this.startDot.y);
+          this.ctx.lineTo(this.startDot.x, this.startDot.y - this.axisLen);
+          this.ctx.stroke();
+          this.ctx.restore();
+        }
+        drawArrow(sapce, ysapce) {
+          this.ctx.beginPath();
+          this.ctx.fillStyle = "red";
+          // x轴箭头
+          this.ctx.moveTo(this.axisLen + this.startDot.x, this.startDot.y);
+          this.ctx.lineTo(this.axisLen + this.startDot.x, this.startDot.y + sapce / 2);
+          this.ctx.lineTo(this.axisLen + this.startDot.x + ysapce, this.startDot.y);
+          this.ctx.lineTo(this.axisLen + this.startDot.x, this.startDot.y - sapce / 2);
+          this.ctx.closePath();
+          // y轴箭头
+          this.ctx.moveTo(this.startDot.x, this.startDot.y - this.axisLen);
+          this.ctx.lineTo(this.startDot.x + sapce / 2, this.startDot.y - this.axisLen);
+          this.ctx.lineTo(this.startDot.x, this.startDot.y - this.axisLen - ysapce);
+          this.ctx.lineTo(this.startDot.x - sapce / 2, this.startDot.y - this.axisLen);
+          this.ctx.closePath();
+          this.ctx.fill();
+        }
+        drawDootted(x, y, r, color) {
+          this.ctx.save();
+          // this.ctx.beginPath();
+          this.ctx.fillStyle = color;
+          this.ctx.arc(x, y, r, 0, (Math.PI / 180) * 360, false);
+          // this.ctx.fill();
+          // this.ctx.closePath();
+          this.ctx.restore();
+        }
+        drawPolyLine(data, color) {
+          this.ctx.save();
+          this.ctx.beginPath();
+          this.ctx.strokeStyle = color;
+          this.ctx.moveTo(data[0].x, data[1].y);
+          data.map((item) => {
+            this.ctx.lineTo(item.x, item.y);
+            // this.drawDootted(item.x, item.y, 4, color);
+          });
+          // this.ctx.closePath();
+          this.ctx.stroke();
+          this.ctx.restore();
+        }
+      }
+    </script>
+    <script src="./index.js"></script>
+  </body>
+</html>
