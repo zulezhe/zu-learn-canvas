@@ -2,7 +2,7 @@
  * @Author: zulezhe
  * @Date: 2021-01-13 14:43:17
  * @LastEditors: zulezhe
- * @LastEditTime: 2021-01-13 15:32:17
+ * @LastEditTime: 2021-01-27 14:22:59
  * @Description: In User Settings Edit
  * @FilePath: \canvas\README.md
 -->
@@ -25,3 +25,15 @@
 |      |      |     |     |     |
 |      |      |     |     |     |
 |      |      |     |     |     |
+
+## 长期计划
+
+### 英语学习
+
+### 数学学习
+
+### 健身/饮食
+
+### 投资学习
+
+### 沟通技巧

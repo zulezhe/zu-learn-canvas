@@ -2,7 +2,183 @@
  * @Author: zulezhe
  * @Date: 2021-01-13 14:04:59
  * @LastEditors: zulezhe
- * @LastEditTime: 2021-01-13 14:04:59
+ * @LastEditTime: 2021-01-27 19:17:26
  * @Description: In User Settings Edit
- * @FilePath: \canvas\06.绘制饼图.html
+ * @FilePath: \canvas\01-基本\10.绘制饼图.html
 -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      canvas {
+        border: 1px solid red;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="canvas-container"></div>
+
+    <script>
+      window = onload = () => {
+        initcanvas();
+      };
+      function initcanvas() {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        const width = 600;
+        const height = 600;
+        canvas.width = width;
+        canvas.height = height;
+        document.body.appendChild(canvas);
+
+        drawAxis(ctx, 100, 500, 400, 400, 10);
+        drawPie(ctx, width / 2, height / 2, 100, [
+          {
+            title: "测试一",
+            value: 20,
+          },
+          {
+            title: "测试二",
+            value: 50,
+          },
+          {
+            title: "测试三",
+            value: 30,
+          },
+        ]);
+      }
+
+      /**
+       * 绘制坐标轴
+       */
+      function drawAxis(context, x, y, width, height, h, color) {
+        // 保存当前的绘图状态
+        context.save();
+        context.beginPath();
+        // 坐标轴圆点
+        context.moveTo(x, y);
+        // x轴
+        context.lineTo(x + width, y);
+        // y轴
+        context.moveTo(x, y);
+        context.lineTo(x, y - height);
+        // 绘制
+        context.stroke();
+        //绘制右侧箭头
+        context.moveTo(x + width, y);
+        context.lineTo(x + width, y + h / 2);
+        context.lineTo(x + width + h, y);
+        context.lineTo(x + width, y - h / 2);
+        context.closePath();
+        context.fill();
+
+        //绘制左侧箭头
+        context.moveTo(x, y - height);
+        context.lineTo(x + h / 2, y - height);
+        context.lineTo(x, y - height - h);
+        context.lineTo(x - h / 2, y - height);
+        context.closePath();
+        context.fill();
+        //恢复之前的绘图状态
+        context.restore();
+      }
+      // 绘制饼图
+      function drawPie(context, x, y, radius, list) {
+        context.save();
+        let data = [];
+        let sum = 0;
+        let sAngle = 0; //开始弧度
+        let eAngle = 0; //结束弧度
+        list.map((item) => {
+          sum += item.value;
+        });
+        list.map((item, i) => {
+          data.push({
+            title: item.title,
+            value: (item.value / sum) * Math.PI * 2,
+          });
+        });
+        for (let i = 0; i < data.length; i++) {
+          if (i > 0) {
+            // 角度的结束角,要加上上一个角的结束位置,下面我们用起始角=结束角,所以直接+sAngle就行了
+            eAngle += data[i].value;
+            sAngle += data[i - 1].value;
+          } else {
+            sAngle = 0;
+            eAngle = data[i].value;
+          }
+          let color = randomColor();
+          context.beginPath();
+          context.moveTo(x, y);
+          context.arc(x, y, radius, sAngle, eAngle);
+          context.fillStyle = color;
+          context.fill();
+          drawTitle(context, x, y, sAngle, eAngle, radius, 10, data[i].title, color);
+        }
+        context.restore();
+      }
+
+      // 绘制title
+      // https://blog.csdn.net/weixin_41105030/article/details/89076273
+      function drawTitle(context, x, y, sAngle, eAngle, radius, outLine, title, color) {
+        // 绘制扇形的title,要使用到三角函数,title的连线和扇形的起始边形成的弧度应该是原扇形弧度的一半
+        // title的连接线应该超出扇形的的边,斜边的长度由用户自定义
+        // 求出title连接线的坐标
+        let p = { x: "", y: "" };
+        // 连接线夹角的弧度
+        //斜边长
+        let hypotenuse = radius + outLine;
+        // 求p点的y轴坐标,由三角函数公式的正弦公式可知,sin 角度=对边/斜边
+        p.y = Math.sin((sAngle + eAngle) / 2) * (radius + outLine) + y;
+        p.x = Math.cos((sAngle + eAngle) / 2) * (radius + outLine) + x;
+        context.beginPath();
+        context.moveTo(x, y);
+        context.lineTo(p.x, p.y);
+        context.strokeStyle = color;
+        context.stroke();
+        // 绘制文字下面的线
+        context.beginPath();
+        context.moveTo(p.x, p.y);
+        let textWidth = context.measureText(title).width + 20;
+        let textLineX = p.x > x ? p.x + textWidth : p.x - textWidth;
+        console.log(textWidth);
+        context.lineTo(textLineX, p.y);
+        context.stroke();
+        // 绘制文字
+        context.beginPath();
+        context.textBaseline = "bottom";
+        context.fillText(title, p.x > x ? p.x : p.x - textWidth, p.y);
+        context.stroke();
+      }
+
+      // 绘制图例
+      function drawLegend(context) {}
+
+      // 随机生成颜色值
+      function randomColor() {
+        let random = Math.random();
+        return "#" + Math.random().toString(16).slice(-6);
+      }
+      //角度转弧度
+      function angleToRad(angle) {
+        return (Math.PI / 180) * angle;
+      }
+      // 弧度转角度
+      function radToAngle(rad) {
+        return 180 / Math.PI / rad;
+      }
+    </script>
+  </body>
+</html>

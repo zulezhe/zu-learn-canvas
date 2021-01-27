@@ -1,34 +1,10 @@
 <!--
  * @Author: zulezhe
- * @Date: 2021-01-13 14:04:30
- * @LastEditors: zulezhe
- * @LastEditTime: 2021-01-26 18:26:55
- * @Description: In User Settings Edit
- * @FilePath: \canvas\01-基本\09.绘制折线图.html
--->
-<!--
- * @Author: zulezhe
- * @Date: 2021-01-13 14:04:15
- * @LastEditors: zulezhe
- * @LastEditTime: 2021-01-20 19:12:50
- * @Description: In User Settings Edit
- * @FilePath: \canvas\01-基本\05.绘制安卓机器人.html
--->
-<!--
- * @Author: zulezhe
- * @Date: 2021-01-18 16:29:13
- * @LastEditors: zulezhe
- * @LastEditTime: 2021-01-20 16:31:36
- * @Description: In User Settings Edit
- * @FilePath: \canvas\01-基本\04.绘制圆.html
--->
-<!--
- * @Author: zulezhe
  * @Date: 2021-01-13 11:19:20
  * @LastEditors: zulezhe
- * @LastEditTime: 2021-01-18 18:47:17
+ * @LastEditTime: 2021-01-27 16:50:38
  * @Description: In User Settings Edit
- * @FilePath: \canvas\01-基本\03.文字绘制.html
+ * @FilePath: \canvas\01-基本\09.绘制折线图.html
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -55,6 +31,9 @@
         height: 100%;
         border: 1px solid red;
         position: absolute;
+      }
+      canvas {
+        border: 1px solid red;
       }
     </style>
   </head>
@@ -89,8 +68,8 @@
           this.startDot = startDot;
           this.axisLen = axisLen;
           this.CanvasDom = CanvasDom;
-          this.CanvasDom.width = axisLen * 10;
-          this.CanvasDom.height = axisLen * 10;
+          this.CanvasDom.width = axisLen * 2;
+          this.CanvasDom.height = axisLen * 2;
           console.log(this.CanvasDom);
           this.ctx = CanvasDom.getContext("2d");
         }
@@ -126,11 +105,8 @@
         }
         drawDootted(x, y, r, color) {
           this.ctx.save();
-          // this.ctx.beginPath();
           this.ctx.fillStyle = color;
           this.ctx.arc(x, y, r, 0, (Math.PI / 180) * 360, false);
-          // this.ctx.fill();
-          // this.ctx.closePath();
           this.ctx.restore();
         }
         drawPolyLine(data, color) {
@@ -140,9 +116,7 @@
           this.ctx.moveTo(data[0].x, data[1].y);
           data.map((item) => {
             this.ctx.lineTo(item.x, item.y);
-            // this.drawDootted(item.x, item.y, 4, color);
           });
-          // this.ctx.closePath();
           this.ctx.stroke();
           this.ctx.restore();
         }

@@ -2,7 +2,7 @@
  * @Author: zulezhe
  * @Date: 2021-01-13 11:19:20
  * @LastEditors: zulezhe
- * @LastEditTime: 2021-01-20 16:28:11
+ * @LastEditTime: 2021-01-27 19:01:05
  * @Description: In User Settings Edit
  * @FilePath: \canvas\01-基本\03.文字绘制.html
 -->
@@ -85,6 +85,11 @@
         ctx.beginPath();
         ctx.fillText("绘制一个新文字", 300, 400);
         ctx.strokeText("绘制一个新文字", 300, 500);
+        /**
+         * 获取绘制到画布文字的宽度
+         * measureText()
+         */
+        console.log(ctx.measureText("绘制一个新文字").width);
       };
     </script>
     <script src="./index.js"></script>
