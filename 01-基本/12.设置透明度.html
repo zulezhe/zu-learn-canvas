@@ -1,0 +1,45 @@
+<!--
+ * @Author: zulezhe
+ * @Date: 2021-01-28 15:16:53
+ * @LastEditors: zulezhe
+ * @LastEditTime: 2021-01-28 16:07:13
+ * @Description: In User Settings Edit
+ * @FilePath: \canvas\01-基本\12.设置透明度.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      canvas {
+        outline: 1px dotted;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      const canvas = document.createElement("canvas");
+      canvas.width = 400;
+      canvas.height = 400;
+      const ctx = canvas.getContext("2d");
+      document.body.appendChild(canvas);
+      // 设置全局透明度,使用这个属性的话需要使用restore来恢复canvas的状态,否者canvas会一直透明的
+      ctx.save();
+      ctx.globalAlpha = 0.5;
+      ctx.fillStyle = "red";
+      ctx.fillRect(50, 50, 200, 200);
+      ctx.fillStyle = "blue";
+      ctx.fillRect(100, 100, 200, 200);
+      ctx.font = "16px SimSun, Songti SC yellow";
+      ctx.fillStyle = "yellow";
+      ctx.fillText("文字的颜色也被透明化了", 120, 150);
+      ctx.restore();
+      
+      ctx.font = "16px SimSun, Songti SC yellow";
+      ctx.fillStyle = "yellow";
+      ctx.fillText("恢复原来的样式", 120, 180);
+    </script>
+  </body>
+</html>
