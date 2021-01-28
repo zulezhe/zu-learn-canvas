@@ -1,0 +1,84 @@
+<!--
+ * @Author: zulezhe
+ * @Date: 2021-01-28 16:58:38
+ * @LastEditors: zulezhe
+ * @LastEditTime: 2021-01-28 18:40:59
+ * @Description: In User Settings Edit
+ * @FilePath: \canvas\02-进阶\01.阴影.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+      }
+      * {
+        padding: 0;
+        margin: 0;
+      }
+      canvas {
+        outline: 1px dashed;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      window.onload = () => {
+        console.log(ctx);
+        drawOutShadow(10);
+        drawInnerShadow(10);
+        drawTextShadow(2);
+      };
+      // 绘制外阴影
+      function drawOutShadow(value) {
+        ctx.save();
+        ctx.beginPath();
+        // 设置阴影颜色
+        ctx.shadowColor = "blue";
+        // 设置阴影的模糊值
+        ctx.shadowBlur = value;
+        ctx.fillStyle = "red";
+        ctx.fillRect(100, 100, 300, 100);
+        ctx.fill();
+        ctx.restore();
+      }
+      // 阴影偏移量
+      function drawInnerShadow(value) {
+        ctx.save();
+        ctx.beginPath();
+        // 设置阴影颜色
+        ctx.shadowColor = "blue";
+        // 设置阴影的模糊值
+        ctx.shadowBlur = value;
+        ctx.shadowOffsetX = 8;
+        ctx.shadowOffsetY = 8;
+        ctx.fillStyle = "red";
+        ctx.fillRect(600, 100, 300, 100);
+        ctx.fill();
+        ctx.restore();
+      }
+      // 文字阴影
+      function drawTextShadow(value) {
+        ctx.save();
+        ctx.beginPath();
+        // 设置阴影颜色
+        ctx.shadowColor = "blue";
+        // 设置阴影的模糊值
+        ctx.shadowBlur = value;
+        ctx.shadowOffsetX = 8;
+        ctx.shadowOffsetY = 8;
+        ctx.font = "35px YAHEI";
+        ctx.fillStyle = "red";
+        ctx.fillText("阴影文字", 600, 500);
+        ctx.restore();
+      }
+    </script>
+    <script src="../01-基本/index.js"></script>
+  </body>
+</html>
