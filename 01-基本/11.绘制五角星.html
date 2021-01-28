@@ -2,7 +2,7 @@
  * @Author: zulezhe
  * @Date: 2021-01-13 14:09:31
  * @LastEditors: zulezhe
- * @LastEditTime: 2021-01-27 09:19:58
+ * @LastEditTime: 2021-01-28 15:03:47
  * @Description: In User Settings Edit
  * @FilePath: \canvas\01-基本\11.绘制五角星.html
 -->
@@ -12,8 +12,82 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      #canvas-container {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+      canvas {
+        border: 1px solid red;
+      }
+    </style>
   </head>
   <body>
-    <script></script>
+    <div id="canvas-container"></div>
+    <script>
+      /**
+       * 绘制五角星
+       * 绘制之前我们先看下五角星的组成,五角星的外面五个角连起来可以组成一个大圆,内部五个角度可以组成一个小圆,两个圆是同心圆
+       */
+      class DrawStar {
+        constructor(el, x, y, width, height, r, R) {
+          this.el = document.getElementById(el);
+          this.x = x;
+          this.y = y;
+          this.r = r;
+          this.R = R;
+          this.width = width;
+          this.height = height;
+          this.ctx = null;
+          this.init();
+        }
+        init() {
+          const canvas = document.createElement("canvas");
+          canvas.width = this.width;
+          canvas.height = this.height;
+          this.ctx = canvas.getContext("2d");
+          this.el.appendChild(canvas);
+        }
+        drawCircle() {
+          this.ctx.save();
+          this.ctx.beginPath();
+          this.ctx.strokeStyle = "red";
+          this.ctx.arc(this.x, this.y, this.r, 0, (Math.PI / 180) * 360);
+          this.ctx.stroke();
+          this.ctx.beginPath();
+          this.ctx.arc(this.x, this.y, this.R, 0, (Math.PI / 180) * 360);
+          this.ctx.stroke();
+          this.ctx.restore();
+        }
+        /**
+         * 五角星的内角五个点均匀的分布在内圆的边上,已知圆的角度为360,则五角星内角每个角度为360/5=72,而根据圆心画的直角坐标系,的角度为90度,所以外角和半径的夹角为18度,内角和半径的夹角为54度
+         */
+        drawStar() {
+          this.ctx.beginPath();
+          for (let i = 0; i < 5; i++) {
+            console.log(18 + i * 72, 54 + i * 72);
+            this.ctx.lineTo(this.R * Math.cos(((18 + i * 72) / 180) * Math.PI) + this.x, -this.R * Math.sin(((18 + i * 72) / 180) * Math.PI) + this.y);
+            this.ctx.lineTo(this.r * Math.cos(((54 + i * 72) / 180) * Math.PI) + this.x, -this.r * Math.sin(((54 + i * 72) / 180) * Math.PI) + this.y);
+          }
+          this.ctx.closePath();
+          this.ctx.stroke();
+        }
+      }
+      const drawStar = new DrawStar("canvas-container", 400, 400, 800, 800, 100, 200);
+      drawStar.drawCircle();
+      drawStar.drawStar();
+    </script>
   </body>
 </html>

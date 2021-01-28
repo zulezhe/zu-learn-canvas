@@ -2,7 +2,7 @@
  * @Author: zulezhe
  * @Date: 2021-01-13 14:04:59
  * @LastEditors: zulezhe
- * @LastEditTime: 2021-01-27 19:17:26
+ * @LastEditTime: 2021-01-28 14:51:41
  * @Description: In User Settings Edit
  * @FilePath: \canvas\01-基本\10.绘制饼图.html
 -->
@@ -99,8 +99,8 @@
         context.save();
         let data = [];
         let sum = 0;
-        let sAngle = 0; //开始弧度
-        let eAngle = 0; //结束弧度
+        let sRade = 0; //开始弧度
+        let eRad = 0; //结束弧度
         list.map((item) => {
           sum += item.value;
         });
@@ -112,27 +112,27 @@
         });
         for (let i = 0; i < data.length; i++) {
           if (i > 0) {
-            // 角度的结束角,要加上上一个角的结束位置,下面我们用起始角=结束角,所以直接+sAngle就行了
-            eAngle += data[i].value;
-            sAngle += data[i - 1].value;
+            // 弧度的结束角,要加上上一个角的结束位置,下面我们用起始角=结束角,所以直接+sRade就行了
+            eRad += data[i].value;
+            sRade += data[i - 1].value;
           } else {
-            sAngle = 0;
-            eAngle = data[i].value;
+            sRade = 0;
+            eRad = data[i].value;
           }
           let color = randomColor();
           context.beginPath();
           context.moveTo(x, y);
-          context.arc(x, y, radius, sAngle, eAngle);
+          context.arc(x, y, radius, sRade, eRad);
           context.fillStyle = color;
           context.fill();
-          drawTitle(context, x, y, sAngle, eAngle, radius, 10, data[i].title, color);
+          drawTitle(context, x, y, sRade, eRad, radius, 10, data[i].title, color);
         }
         context.restore();
       }
 
       // 绘制title
       // https://blog.csdn.net/weixin_41105030/article/details/89076273
-      function drawTitle(context, x, y, sAngle, eAngle, radius, outLine, title, color) {
+      function drawTitle(context, x, y, sRade, eRad, radius, outLine, title, color) {
         // 绘制扇形的title,要使用到三角函数,title的连线和扇形的起始边形成的弧度应该是原扇形弧度的一半
         // title的连接线应该超出扇形的的边,斜边的长度由用户自定义
         // 求出title连接线的坐标
@@ -141,8 +141,8 @@
         //斜边长
         let hypotenuse = radius + outLine;
         // 求p点的y轴坐标,由三角函数公式的正弦公式可知,sin 角度=对边/斜边
-        p.y = Math.sin((sAngle + eAngle) / 2) * (radius + outLine) + y;
-        p.x = Math.cos((sAngle + eAngle) / 2) * (radius + outLine) + x;
+        p.y = Math.sin((sRade + eRad) / 2) * (radius + outLine) + y;
+        p.x = Math.cos((sRade + eRad) / 2) * (radius + outLine) + x;
         context.beginPath();
         context.moveTo(x, y);
         context.lineTo(p.x, p.y);
