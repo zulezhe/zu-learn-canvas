@@ -2,7 +2,7 @@
  * @Author: zulezhe
  * @Date: 2021-01-28 16:58:38
  * @LastEditors: zulezhe
- * @LastEditTime: 2021-01-28 18:45:21
+ * @LastEditTime: 2021-01-29 14:45:41
  * @Description: In User Settings Edit
  * @FilePath: \canvas\02-进阶\02.渐变.html
 -->
@@ -29,7 +29,90 @@
   </head>
   <body>
     <script>
-      window.onload = () => {};
+      //渐变分为线性渐变和径向渐变,使用方法css3中是一致的
+      window.onload = () => {
+        drawLinearGradient(ctx);
+        drawRadiaGradient(ctx);
+        drawRingGradient(ctx);
+        drawSpreadCircle(ctx);
+      };
+      /**
+       * 绘制线性渐变,返回渐变对象,对象中有addColorStop()这个方法
+       * createLinearGradient(x0,y0,x1,y1)
+       * x0:起始点横坐标
+       * y0:起始点纵坐标
+       * x1:结束点横坐标
+       * y1:结束点纵坐标
+       * addColorStop(offset,color)
+       *
+       * offset:渐变结束的位置,也是当前颜色到这里结束,范围0-1
+       * color: 渐变的颜色
+       */
+      function drawLinearGradient(context) {
+        context.save();
+        context.beginPath();
+        const gradient = context.createLinearGradient(100, 100, 300, 100);
+        gradient.addColorStop(0, "red");
+        gradient.addColorStop(1, "blue");
+        context.fillStyle = gradient;
+        context.fillRect(100, 100, 300, 300);
+        context.restore();
+      }
+      /**
+       * 径向渐变
+       * createRadialGradient(x0,y0,r0,x1,y1,r1);
+       * x0:起始点横坐标
+       * y0:起始点纵坐标
+       * r0:起始点半径
+       * x1:结束点横坐标
+       * y1:结束点纵坐标
+       * r1:结束点半径
+       * 一般情况下x0y0,和x1y1都相同的,因为它们代表圆心的坐标
+       */
+      function drawRadiaGradient(context) {
+        context.save();
+        context.beginPath();
+        const gradient = context.createRadialGradient(100, 600, 50, 100, 600, 100);
+        gradient.addColorStop(0, "red");
+        gradient.addColorStop(1, "blue");
+        context.fillStyle = gradient;
+        context.arc(100, 600, 100, 0, (Math.PI / 180) * 360);
+        context.fill();
+        context.restore();
+      }
+      /**
+       * 绘制一空心渐变圆
+       */
+      function drawRingGradient(context) {
+        context.save();
+        context.beginPath();
+        const gradient = context.createRadialGradient(600, 300, 6, 600, 300, 100);
+        gradient.addColorStop(0, "rgba(0,0,0,0)");
+        gradient.addColorStop(0.5, "rgba(0,0,0,0)");
+        gradient.addColorStop(0.6, "rgba(0,0,0,0)");
+        gradient.addColorStop(1, "blue");
+        context.fillStyle = gradient;
+        context.arc(600, 300, 100, 0, (Math.PI / 180) * 360);
+        context.fill();
+        context.restore();
+      }
+
+      /**
+       * 绘制一扩散圆
+       */
+
+      function drawSpreadCircle(context) {
+        context.save();
+        context.beginPath();
+        const gradient = context.createRadialGradient(900, 300, 0, 900, 300, 100);
+        gradient.addColorStop(0, "red");
+        gradient.addColorStop(0.6, "#c018b3");
+        gradient.addColorStop(1, "blue");
+        context.fillStyle = gradient;
+        context.arc(900, 300, 100, 0, (Math.PI / 180) * 360);
+        context.fill();
+        context.restore();
+      }
     </script>
     <script src="../01-基本/index.js"></script>
   </body>

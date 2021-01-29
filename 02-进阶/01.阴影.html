@@ -2,7 +2,7 @@
  * @Author: zulezhe
  * @Date: 2021-01-28 16:58:38
  * @LastEditors: zulezhe
- * @LastEditTime: 2021-01-28 18:40:59
+ * @LastEditTime: 2021-01-29 10:13:31
  * @Description: In User Settings Edit
  * @FilePath: \canvas\02-进阶\01.阴影.html
 -->
@@ -34,6 +34,7 @@
         drawOutShadow(10);
         drawInnerShadow(10);
         drawTextShadow(2);
+        shadowClone();
       };
       // 绘制外阴影
       function drawOutShadow(value) {
@@ -52,9 +53,7 @@
       function drawInnerShadow(value) {
         ctx.save();
         ctx.beginPath();
-        // 设置阴影颜色
         ctx.shadowColor = "blue";
-        // 设置阴影的模糊值
         ctx.shadowBlur = value;
         ctx.shadowOffsetX = 8;
         ctx.shadowOffsetY = 8;
@@ -67,15 +66,26 @@
       function drawTextShadow(value) {
         ctx.save();
         ctx.beginPath();
-        // 设置阴影颜色
         ctx.shadowColor = "blue";
-        // 设置阴影的模糊值
         ctx.shadowBlur = value;
         ctx.shadowOffsetX = 8;
         ctx.shadowOffsetY = 8;
         ctx.font = "35px YAHEI";
         ctx.fillStyle = "red";
         ctx.fillText("阴影文字", 600, 500);
+        ctx.restore();
+      }
+
+      // 使用阴影实现克隆
+      function shadowClone() {
+        ctx.save();
+        ctx.beginPath();
+        ctx.shadowBlur = 0;
+        ctx.shadowColor = "red";
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 32;
+        ctx.font = "32px songti";
+        ctx.fillText("克隆文字", 600, 700);
         ctx.restore();
       }
     </script>
