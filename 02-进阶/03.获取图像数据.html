@@ -2,7 +2,7 @@
  * @Author: zulezhe
  * @Date: 2021-01-28 17:00:12
  * @LastEditors: zulezhe
- * @LastEditTime: 2021-01-29 19:26:53
+ * @LastEditTime: 2021-02-01 17:40:59
  * @Description: In User Settings Edit
  * @FilePath: \canvas\02-进阶\03.获取图像数据.html
 -->
@@ -39,25 +39,9 @@
       const context = mycanvas.getContext();
       drawImageData(context);
       getImageData(context);
-      /**
-       * 把图像绘制到画布上,可以传9个参数,
-       * context.drawImage(image, dx, dy);
-       * context.drawImage(image, dx, dy, dWidth, dHeight);
-       * context.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
-       * Image:规定要使用的图像、画布或视频。
-       * sx:可选。选择从图片上开始选区的 x 坐标位置。
-       * sy:可选。选择从图片上开始选区的 y 坐标位置。
-       * swidth:可选。被绘制图像的宽度。
-       * sheight:可选。被绘制图像的高度。
-       * dx:从画布的x坐标开始绘制
-       * dy:从画布的y坐标开始绘制
-       * width:可选,绘制到画布的宽度,可以拉伸或者压缩
-       * height:可选绘制到画布的高度
-       *
-       * 可以创建一个空的imageData对象,对象中的像素信息为黑,返回ImageData对象
-       * context.createImageData(width, height);
-       *
-       */
+      createImageData(context);
+      createPattern(context);
+
       /**
        * 把图像绘制到画布上,可以传9个参数,
        * context.drawImage(image, dx, dy);
@@ -109,7 +93,6 @@
        * dirtyY （可选）图像数据渲染区域的左上角纵坐标。默认值是0。
        * dirtyWidth（可选）图像数据渲染区域的宽度。默认值是imagedata图像的宽度。
        * dirtyHeight（可选） 图像数据渲染区域的高度。默认值是imagedata图像的高度。
-       *context.createPattern(Image, repetition);平铺
        */
       function putImageData(context) {
         // 获取ImageData对象
@@ -119,6 +102,59 @@
         context.putImageData(imageData, 600, 0);
         // 对像素点进行裁剪然后绘制
         context.putImageData(imageData, 100, 100, 100, 0, 100, 100);
+      }
+
+      /*
+       * 可以创建一个空的imageData对象,对象中的像素信息为黑,返回ImageData对象
+       * context.createImageData(width, height);
+       */
+      function createImageData(context) {
+        const imagedata = context.createImageData(200, 300);
+        // 给对应坐标位置的数据设置色值为绿色
+        for (var x = 1; x <= 300; x += 5) {
+          for (var y = 1; y <= 150; y += 5) {
+            var index = 4 * ((y - 1) * 300 + (x - 1));
+            // 变为绿色，色值依次是0, 128, 0, 256
+            imagedata.data[index] = 0;
+            imagedata.data[index + 1] = 128;
+            imagedata.data[index + 2] = 0;
+            imagedata.data[index + 3] = 256;
+          }
+        }
+        console.log(imagedata);
+        //把创建的ImageData绘制到画布上
+        context.putImageData(imagedata, 800, 400);
+      }
+      /**
+       * 图像的平铺方式
+       *context.createPattern(Image, repetition);平铺
+       imageObject
+          用来平铺的CanvasImageSource图像。可以是下面的类型：
+          HTMLImageElement，也就是<img>元素。
+          HTMLVideoElement，也就是<video>元素，例如捕获摄像头视频产生的图像信息。
+          HTMLCanvasElement
+          CanvasRenderingContext2D
+          ImageBitmap
+          ImageData
+          Blob
+        repetition
+          图案的平铺方式，可以是下面的值：
+          'repeat'，水平和垂直平铺。当repetition属性值为空字符串''或者null，也会按照'repeat'进行渲染。
+          'repeat-x'，仅水平平铺。
+          'repeat-y'，仅垂直平铺。
+          'no-repeat'，不平铺。
+       */
+
+      function createPattern(context) {
+        const img = new Image();
+        img.src = "./images/2.jpg";
+        img.onload = function () {
+          console.log("加载成功");
+          const pattern = context.createPattern(img, "repeat");
+          context.fillStyle = pattern;
+          context.fillRect(1000, 0, img.width * 5, 500);
+          context.stroke();
+        };
       }
     </script>
   </body>

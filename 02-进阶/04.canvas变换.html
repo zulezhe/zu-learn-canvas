@@ -2,7 +2,7 @@
  * @Author: zulezhe
  * @Date: 2021-01-29 14:50:33
  * @LastEditors: zulezhe
- * @LastEditTime: 2021-01-29 15:35:40
+ * @LastEditTime: 2021-02-02 17:29:38
  * @Description: In User Settings Edit
  * @FilePath: \canvas\02-进阶\04.canvas变换.html
 -->
@@ -11,19 +11,138 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>canvas变换</title>
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      #canvas-container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      canvas {
+        outline: 3px dashed red;
+      }
+    </style>
   </head>
   <body>
+    <div id="canvas-container"></div>
+    <script src="./index.js"></script>
     <script>
+      const el = document.getElementById("canvas-container");
+      let width = el.offsetWidth - 30;
+      const height = el.offsetHeight - 30;
+      const mycanvas = new MyCanvas("canvas-container", width, height);
+      const context = mycanvas.getContext();
+      window.onload = function () {
+        translate(context, 50, 50, 300, 150);
+        scale(context);
+        rotate(context);
+        transform(context);
+      };
       /**
-     * context.setTransform(a, b, c, d, e, f);
-     * context.scale(x, y);
-     * context.rotate(Math.PI / 180 * degree);
-     * context.transform(a, b, c, d, e, f);
-     * context.translate(x, y);
-     * 
-     * 
-     */
+       * context.setTransform(a, b, c, d, e, f);
+       * context.transform(a, b, c, d, e, f);
+       */
+
+      /**
+       * 平移操作
+       * translate(x,y)
+       * 很好理解就是图形的平移操作,但是要注意的一点,所谓的平移平移的是参考坐标系
+       */
+      function translate(context, x, y, width, height) {
+        context.save();
+        context.beginPath();
+        const linearGradient = context.createLinearGradient(x, y, x + width, y + height);
+        linearGradient.addColorStop(0, "red");
+        linearGradient.addColorStop(0.5, "blue");
+        linearGradient.addColorStop(1, "yellow");
+        context.fillStyle = linearGradient;
+        context.fillRect(x, y, width, height);
+
+        context.fillStyle = linearGradient;
+        context.translate(0, 300);
+        context.fillRect(x, y, width, height);
+        context.font = "16px YaHei";
+        context.fillStyle = "#fff";
+        //从这个高度我们更可以看出来评议的是坐标系了
+        context.fillText("我是平移后的", width / 2, y + height / 2);
+        context.restore();
+      }
+      /*
+       * 放大或者缩小操作
+       * context.scale(x, y);
+       *  传入两个参数，分别是水平方向和垂直方向上对象的缩放倍数
+       *  缩放时，图像左上角坐标的位置也会对应缩放。
+       *  缩放时，图像线条的粗细也会对应缩放
+       * 综上所述一般不使用缩放
+       */
+      function scale(context) {
+        context.save();
+        context.beginPath();
+        const gradient = context.createRadialGradient(500, 300, 0, 500, 300, 50);
+        gradient.addColorStop(0, "blue");
+        gradient.addColorStop(1, "skyblue");
+        context.fillStyle = gradient;
+        context.arc(500, 300, 50, 0, (Math.PI / 180) * 360);
+        context.fill();
+
+        context.beginPath();
+        context.scale(2, 2);
+        context.arc(500, 300, 50, 0, (Math.PI / 180) * 360);
+        context.fill();
+        context.restore();
+      }
+      /**
+       * 旋转变换
+       * context.rotate(Math.PI / 180 * degree);
+       * 传入旋转的弧度制
+       *这个的旋转是以坐标系的原点（0，0）为圆心进行的顺时针旋转。所以，在使用rotate()之前，通常需要配合使用translate()平移坐标系，确定旋转的圆心。即，旋转变换通常搭配平移变换使用的。
+       */
+      function rotate(context) {
+        context.save();
+        context.beginPath();
+        context.fillStyle = "skyblue";
+        context.fillRect(1400, 300, 100, 100);
+        context.restore();
+
+        let colorList = ["red", "blue", "yellow", "orange", "brown", "purple"];
+        for (let i = 0; i < 360 / 60; i++) {
+          context.save();
+          context.translate(1500, 500);
+          context.fillStyle = colorList[i];
+          context.rotate((Math.PI / 180) * 60 * i);
+          context.fillRect(0, 0, 100, 100);
+          context.restore();
+        }
+      }
+
+      /**
+       * 矩阵变换
+       * context.transform(a, b, c, d, e, f);
+       *a:水平缩放。
+        b:水平斜切。
+        c:垂直斜切。
+        d:垂直缩放。
+        e:水平位移。
+        f:垂直位移。
+       */
+      function transform(context) {
+        context.save();
+        context.transform(1, 0, 1, 1, 100, 0);
+        context.fillStyle = "yellow";
+        context.fillRect(800, 100, 100, 100);
+        context.restore();
+      }
     </script>
   </body>
 </html>
