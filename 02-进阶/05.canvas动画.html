@@ -2,7 +2,7 @@
  * @Author: zulezhe
  * @Date: 2021-01-13 14:05:10
  * @LastEditors: zulezhe
- * @LastEditTime: 2021-02-02 16:23:23
+ * @LastEditTime: 2021-02-03 18:25:59
  * @Description: In User Settings Edit
  * @FilePath: \canvas\02-进阶\05.canvas动画.html
 -->
@@ -43,14 +43,78 @@
       const context = mycanvas.getContext();
       window.onload = function () {
         //canvas的动画的实质就是不断清除上一个状态的canvas然后绘制下一段的canvas,我们可以使用两种方法实现清除
+        // run(context);
       };
       /***
-       * 通过定时器实现动画
+       * 通过定时器实现动画,可以明显看出来运行的有卡顿的感觉
        *
        */
-      function setInterValAnimation() {
-        
+      function setInterValAnimation(context, x, y, w, h) {
+        context.save();
+        context.beginPath();
+        context.fillStyle = "red";
+        context.fillRect(x, y, w, h);
+        context.restore();
       }
+      function run(context) {
+        let step = 1;
+        let timer = null;
+        timer = setInterval(() => {
+          if (100 + step > 1000) {
+            window.clearInterval(timer);
+            timer = null;
+          }
+          setInterValAnimation(context, 100 + step, 100, 100, 20);
+          context.clearRect(step, 100, 100, 20);
+          step += 10;
+        }, 60);
+      }
+
+      /**
+       * 通过requestAnimationFrame实现高性能动画
+       *
+       * requestAnimationFrame可以把浏览器的重绘和回流放到一个队列,然后一起进行,可以使运行更加顺畅,也降低了CPU的压力
+       */
+      let step = 1;
+      function run2() {
+        step += 10;
+        // 自己调用自己
+        let rafId = requestAnimationFrame(run2);
+        if (100 + step > 1000) {
+          // 根据id停止
+          cancelAnimationFrame(rafId);
+        }
+        setInterValAnimation(context, 100 + step, 100, 100, 20);
+        context.clearRect(step, 100, 100, 20);
+      }
+      requestAnimationFrame(run2);
+
+      /**
+       * 自定义帧率
+       * customFps 帧率
+       * fn 需要执行的函数
+       */
+      function customRequiresAnimationFrame(customFps, fn) {
+        // 自定义帧率
+        let fpsInterval = 1000 / customFps; //根据设定的帧率判断出多少秒执行一次
+        // 每次运动结束的的时间戳
+        let endTime = new Date();
+        function run() {
+          let startTime = new Date();
+          if (startTime - endTime > fpsInterval) {
+            endTime = startTime;
+            fn();
+          }
+          requestAnimationFrame(run);
+        }
+        run();
+      }
+
+      function run() {
+        setInterValAnimation(context, 100 + step, 200, 100, 20);
+        context.clearRect(step, 200, 100, 20);
+      }
+      customRequiresAnimationFrame(67, run);
     </script>
   </body>
 </html>
