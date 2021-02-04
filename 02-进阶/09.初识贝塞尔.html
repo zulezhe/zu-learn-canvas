@@ -2,16 +2,16 @@
  * @Author: zulezhe
  * @Date: 2021-01-29 14:52:16
  * @LastEditors: zulezhe
- * @LastEditTime: 2021-02-04 17:38:11
+ * @LastEditTime: 2021-02-04 17:59:20
  * @Description: In User Settings Edit
- * @FilePath: \canvas\02-进阶\06.椭圆.html
+ * @FilePath: \canvas\02-进阶\09.初识贝塞尔.html
 -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>初识贝塞尔</title>
     <style>
       html,
       body {
@@ -71,33 +71,34 @@
     </div>
     <script>
       /**
-       * context.ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle, anticlockwise)
-       * context.ellipse(起点x,起点y,半径x,半径y,旋转的角度，起始角，结果角，顺时针还是逆时针)
+       * context.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y);
+       * cp1x : 第一个点的x坐标
+       * cp1y : 第一个点的y坐标
+       * cp2x : 第二个点的x坐标
+       * cp2y : 第二个点的y坐标
+       * x    : 结束点的x坐标
+       * y    : 结束点的y坐标
        */
       const canvas = document.getElementById("canvas");
       const ctx = canvas.getContext("2d");
       canvas.width = document.getElementById("main").offsetWidth;
       canvas.height = document.getElementById("main").offsetHeight;
       // 绘制一定角度的椭圆圆弧
-      function drawEllipse(deg) {
-        ctx.beginPath();
-        ctx.ellipse(550, 300, 100, 50, 0, 0, (Math.PI / 180) * deg, false);
-        ctx.strokeStyle = `rgba(${81 + 171 * Math.abs(1 - deg * 2)}, ${160 - 160 * Math.abs(1 - deg * 2)}, ${255},1)`;
-        ctx.stroke();
-      }
-      let count = 0;
-      function run() {
-        if (count < 91) {
-          drawEllipse(count * 4);
-          requestAnimationFrame(run);
-        }
-        count++;
+      function bezierCurveTo(context) {
+        context.save();
+        context.beginPath();
+        context.moveTo(50, 50);
+        context.fillText("(203,78)", 203, 78);
+        context.fillText("(82,150)", 82, 150);
+        context.fillText("(250, 100)", 250, 100);
+        context.bezierCurveTo(203, 78, 82, 150, 250, 100);
+        context.stroke();
+        context.restore();
       }
 
       document.getElementById("handle-button").onclick = function () {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        count = 0;
-        run();
+        bezierCurveTo(ctx);
       };
     </script>
   </body>

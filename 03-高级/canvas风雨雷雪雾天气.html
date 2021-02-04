@@ -1,0 +1,407 @@
+<!--
+ * @Author: zulezhe
+ * @Date: 2021-02-04 16:40:53
+ * @LastEditors: zulezhe
+ * @LastEditTime: 2021-02-04 17:35:40
+ * @Description: In User Settings Edit
+ * @FilePath: \canvas\03-高级\canvas风雨雷雪雾天气.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>风雨雷雪雾</title>
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #000;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      #canvas-container {
+        width: 94%;
+        height: 90%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        outline: 2px dashed #e84393;
+      }
+      .header-con {
+        width: 100%;
+        height: 8%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-bottom: 2px dashed #e84393;
+      }
+      .main-con {
+        width: 100%;
+        height: 90%;
+      }
+      .header-con .handle-button {
+        margin-left: 20px;
+        width: 100px;
+        height: 40px;
+        border-radius: 4px;
+        line-height: 40px;
+        text-align: center;
+        cursor: pointer;
+        background: linear-gradient(217deg, #e84393, #e17055);
+        color: #fff;
+        font-weight: 600;
+        transition: all 0.1s cubic-bezier(0.42, 0, 1, 1) 0s;
+      }
+      .header-con .handle-button:active {
+        transform: scale(1.1);
+        border: 1px solid #000;
+      }
+      .active {
+        border: 2px solid #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="canvas-container">
+      <div class="header-con">
+        <div class="handle-button" id="handle1">风</div>
+        <div class="handle-button" id="handle2">雨</div>
+        <div class="handle-button" id="handle3">雷</div>
+        <div class="handle-button" id="handle4">雪</div>
+        <div class="handle-button" id="handle4">雾</div>
+      </div>
+      <div class="main-con">
+        <canvas id="canvas"></canvas>
+      </div>
+    </div>
+    <script>
+      function drawThunder() {
+        var canvasLightning = function (c, cw, ch) {
+          // 初始化
+          this.init = function () {
+            this.loop();
+          };
+          var _this = this;
+          this.c = c;
+          this.ctx = c.getContext("2d");
+          this.cw = cw;
+          this.ch = ch;
+          this.mx = 0;
+          this.my = 0;
+
+          this.lightning = [];
+          this.lightTimeCurrent = 0;
+          this.lightTimeTotal = 50;
+          this.rand = function (rMi, rMa) {
+            return ~~(Math.random() * (rMa - rMi + 1) + rMi);
+          };
+          this.hitTest = function (x1, y1, w1, h1, x2, y2, w2, h2) {
+            return !(x1 + w1 < x2 || x2 + w2 < x1 || y1 + h1 < y2 || y2 + h2 < y1);
+          };
+          // 创建闪电
+          this.createL = function (x, y, canSpawn) {
+            this.lightning.push({
+              x: x,
+              y: y,
+              xRange: this.rand(5, 30),
+              yRange: this.rand(5, 25),
+              path: [
+                {
+                  x: x,
+                  y: y,
+                },
+              ],
+              pathLimit: this.rand(10, 35),
+              canSpawn: canSpawn,
+              hasFired: false,
+            });
+          };
+          // 更新闪电
+          this.updateL = function () {
+            var i = this.lightning.length;
+            while (i--) {
+              var light = this.lightning[i];
+
+              light.path.push({
+                x: light.path[light.path.length - 1].x + (this.rand(0, light.xRange) - light.xRange / 2),
+                y: light.path[light.path.length - 1].y + this.rand(0, light.yRange),
+              });
+
+              if (light.path.length > light.pathLimit) {
+                this.lightning.splice(i, 1);
+              }
+              light.hasFired = true;
+            }
+          };
+          //渲染闪电
+          this.renderL = function () {
+            var i = this.lightning.length;
+            while (i--) {
+              var light = this.lightning[i];
+
+              this.ctx.strokeStyle = "hsla(0, 100%, 100%, " + this.rand(10, 100) / 100 + ")";
+              this.ctx.lineWidth = 1;
+              if (this.rand(0, 30) == 0) {
+                this.ctx.lineWidth = 2;
+              }
+              if (this.rand(0, 60) == 0) {
+                this.ctx.lineWidth = 3;
+              }
+              if (this.rand(0, 90) == 0) {
+                this.ctx.lineWidth = 4;
+              }
+              if (this.rand(0, 120) == 0) {
+                this.ctx.lineWidth = 5;
+              }
+              if (this.rand(0, 150) == 0) {
+                this.ctx.lineWidth = 6;
+              }
+
+              this.ctx.beginPath();
+
+              var pathCount = light.path.length;
+              this.ctx.moveTo(light.x, light.y);
+              for (var pc = 0; pc < pathCount; pc++) {
+                this.ctx.lineTo(light.path[pc].x, light.path[pc].y);
+
+                if (light.canSpawn) {
+                  if (this.rand(0, 100) == 0) {
+                    light.canSpawn = false;
+                    this.createL(light.path[pc].x, light.path[pc].y, false);
+                  }
+                }
+              }
+
+              if (!light.hasFired) {
+                this.ctx.fillStyle = "rgba(255, 255, 255, " + this.rand(4, 12) / 100 + ")";
+                this.ctx.fillRect(0, 0, this.cw, this.ch);
+              }
+
+              if (this.rand(0, 30) == 0) {
+                this.ctx.fillStyle = "rgba(255, 255, 255, " + this.rand(1, 3) / 100 + ")";
+                this.ctx.fillRect(0, 0, this.cw, this.ch);
+              }
+
+              this.ctx.stroke();
+            }
+          };
+
+          // 闪电计时器
+          this.lightningTimer = function () {
+            this.lightTimeCurrent++;
+            if (this.lightTimeCurrent >= this.lightTimeTotal) {
+              var newX = this.rand(100, cw - 100);
+              var newY = this.rand(0, ch / 2);
+              var createCount = this.rand(1, 3);
+              while (createCount--) {
+                this.createL(newX, newY, true);
+              }
+              this.lightTimeCurrent = 0;
+              this.lightTimeTotal = this.rand(30, 100);
+            }
+          };
+
+          //清空画布
+          this.clearCanvas = function () {
+            this.ctx.globalCompositeOperation = "destination-out";
+            this.ctx.fillStyle = "rgba(0,0,0," + this.rand(1, 30) / 100 + ")";
+            this.ctx.fillRect(0, 0, this.cw, this.ch);
+            this.ctx.globalCompositeOperation = "source-over";
+          };
+
+          // 监听窗口变化
+          document.addEventListener("resize", function () {
+            _this.cw = _this.c.width = window.innerWidth;
+            _this.ch = _this.c.height = window.innerHeight;
+          });
+
+          //停止动画
+          this.loop = function () {
+            var loopIt = function () {
+              requestAnimationFrame(loopIt, _this.c);
+              _this.clearCanvas();
+              _this.updateL();
+              _this.lightningTimer();
+              _this.renderL();
+            };
+            loopIt();
+          };
+        };
+
+        // 兼容性
+        var isCanvasSupported = function () {
+          var elem = document.createElement("canvas");
+          return !!(elem.getContext && elem.getContext("2d"));
+        };
+
+        // 设置动画
+        var setupRAF = function () {
+          var lastTime = 0;
+          var vendors = ["ms", "moz", "webkit", "o"];
+          for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+            window.requestAnimationFrame = window[vendors[x] + "RequestAnimationFrame"];
+            window.cancelAnimationFrame = window[vendors[x] + "CancelAnimationFrame"] || window[vendors[x] + "CancelRequestAnimationFrame"];
+          }
+
+          if (!window.requestAnimationFrame) {
+            window.requestAnimationFrame = function (callback, element) {
+              var currTime = new Date().getTime();
+              var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+              var id = window.setTimeout(function () {
+                callback(currTime + timeToCall);
+              }, timeToCall);
+              lastTime = currTime + timeToCall;
+              return id;
+            };
+          }
+
+          if (!window.cancelAnimationFrame) {
+            window.cancelAnimationFrame = function (id) {
+              clearTimeout(id);
+            };
+          }
+        };
+
+        // 调用
+        if (isCanvasSupported) {
+          var c = document.getElementById("canvas");
+
+          console.log(c);
+          var cw = (c.width = document.getElementsByClassName("main-con")[0].offsetWidth);
+          var ch = (c.height = document.getElementsByClassName("main-con")[0].offsetHeight);
+          var cl = new canvasLightning(c, cw, ch);
+          setupRAF();
+          cl.init();
+        }
+      }
+
+      const btnList = document.querySelectorAll(".handle-button");
+      console.log(btnList);
+      for (let i = 0; i < btnList.length; i++) {
+        const item = btnList[i];
+        item.onclick = function () {
+          item.className += " active";
+          console.log(item.innerText);
+          if (item.innerText === "雷") {
+            drawThunder();
+          } else if (item.innerText === "风") {
+            var windy = new MotionDisplay();
+            windy.makeNewParticles({});
+            windy.animate({});
+          }
+        };
+      }
+      function MotionDisplay() {
+        this.canvas = document.getElementById("canvas");
+      }
+      //新生成粒子
+      MotionDisplay.prototype.makeNewParticles = function (animator) {
+        this.particles = [];
+        for (var i = 0; i < this.numParticles; i++) {
+          this.particles.push(this.makeParticle(animator));
+        }
+      };
+      //生成粒子
+      MotionDisplay.prototype.makeParticle = function (animator) {
+        var dx = animator ? animator.dx : 0;
+        var dy = animator ? animator.dy : 0;
+        var scale = animator ? animator.scale : 1;
+        var safecount = 0;
+        for (;;) {
+          var a = Math.random();
+          var b = Math.random();
+          // var x = a * this.x0 + (1 - a) * this.x1;
+          // var y = b * this.y0 + (1 - b) * this.y1; //纬度
+          var x = a * windParam.getx0() + (1 - a) * windParam.getx1();
+          var y = b * windParam.gety0() + (1 - b) * windParam.gety1();
+          var v = this.field.getValue(x, y);
+          if (this.field.maxLength == 0) {
+            return new Particle(x, y, 1 + 40 * Math.random());
+          }
+          var m = v.length() / this.field.maxLength;
+          if ((v.x || v.y) && (++safecount > 10 || Math.random() > m * 0.9)) {
+            var proj = this.projection.project(x, y);
+            var sx = proj.x * scale + dx;
+            var sy = proj.y * scale + dy;
+            if (++safecount > 10 || !(sx < 0 || sy < 0 || sx > this.canvas.width || sy > this.canvas.height)) {
+              return new Particle(x, y, 1 + 40 * Math.random());
+            }
+          } else {
+            return new Particle(0, 0, -1);
+          }
+        }
+      };
+      //动画（移动+绘制）
+      MotionDisplay.prototype.animate = function (animator) {
+        this.moveThings(animator);
+        this.draw(animator);
+      };
+      //移动
+      MotionDisplay.prototype.moveThings = function (animator) {
+        for (var i = 0; i < this.particles.length; i++) {
+          var p = this.particles[i];
+          if (p.age > 0 && this.field.inBounds(p.x, p.y)) {
+            var a = this.field.getValue(p.x, p.y);
+            p.x += windParam.speed * a.x;
+            p.y += windParam.speed * a.y;
+            p.age--;
+          } else {
+            this.particles[i] = this.makeParticle(animator);
+          }
+        }
+      };
+      //绘制
+      MotionDisplay.prototype.draw = function (animator) {
+        var g = this.canvas.getContext("2d");
+        var w = this.canvas.width;
+        var h = this.canvas.height;
+
+        var dx = animator.dx;
+        var dy = animator.dy;
+        var scale = animator.scale;
+
+        var proj = new Vector(0, 0);
+        var val = new Vector(0, 0);
+
+        g.strokeStyle = "rgb(255,255,255)";
+        var prev = g.globalCompositeOperation;
+        g.globalCompositeOperation = "destination-in";
+        g.fillStyle = "rgba(0,0,0,0.95)";
+        g.fillRect(0, 0, w, h);
+        g.globalCompositeOperation = prev;
+        g.beginPath();
+        for (var i = 0; i < this.particles.length; i++) {
+          var p = this.particles[i];
+          if (!this.field.inBounds(p.x, p.y)) {
+            p.age = -2;
+            continue;
+          }
+          this.projection.project(p.x, p.y, proj);
+          proj.x = proj.x * scale + dx;
+          proj.y = proj.y * scale + dy;
+          if (proj.x < 0 || proj.y < 0 || proj.x > w || proj.y > h) {
+            p.age = -2;
+          }
+          if (p.oldX != -1 && particledrawflag == 1) {
+            var wind = this.field.getValue(p.x, p.y, val);
+            var s = wind.length() / this.maxLength;
+
+            g.moveTo(proj.x, proj.y);
+            g.lineTo(p.oldX, p.oldY);
+          }
+          p.oldX = proj.x;
+          p.oldY = proj.y;
+        }
+        g.stroke();
+      };
+    </script>
+  </body>
+</html>

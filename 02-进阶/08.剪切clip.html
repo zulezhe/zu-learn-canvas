@@ -1,0 +1,84 @@
+<!--
+ * @Author: zulezhe
+ * @Date: 2021-01-29 15:29:45
+ * @LastEditors: zulezhe
+ * @LastEditTime: 2021-02-04 16:37:13
+ * @Description: In User Settings Edit
+ * @FilePath: \canvas\02-进阶\08.剪切clip.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>canvas()</title>
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      #canvas-container {
+        width: 100%;
+        height: 100%;
+      }
+      canvas {
+        outline: 1px dashed red;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="canvas-container"></div>
+    <script src="./index.js"></script>
+    <script>
+      const mycanvas = new MyCanvas("canvas-container", document.body.offsetWidth, document.body.offsetHeight);
+      const context = mycanvas.getContext();
+      /**
+       * 路径裁剪:就是在画布上设置一个路径，让我们之后绘制的图像只显示在这个路径之中。
+       *context.clip(fillRule);
+       * 填充规则: 非零环绕原则,和奇偶原则
+       *context.clip(path, fillRule);
+       */
+      function clipTest() {
+        const img = new Image();
+        img.src = "./images/img1.jpg";
+        img.onload = function () {
+          context.drawImage(img, 100, 100, img.width, img.height);
+          // 保存绘制状态,防止影响到其他操作
+          context.save();
+          // 绘制一个矩形区域
+          context.rect(700, 100, 100, 100);
+          // 根据上面绘制的矩形区域作为接下来绘制的图像的区域
+          context.clip();
+          // 我们现在绘制的的imageData只会出现在上面绘制的矩形区域内部,超出的部分是不显示的
+          context.drawImage(img, 700, 100, img.width, img.height);
+          // 恢复原有状态
+          context.restore();
+
+          /**
+           * 上面我们绘制的是一个矩形区域,现在我们需要绘制一个三角形区域
+           */
+          context.save();
+          // 剪裁路径是三角形
+          context.beginPath();
+          context.moveTo(1200, 20);
+          context.lineTo(1000, 200);
+          context.lineTo(1400, 200);
+          context.closePath();
+          context.strokeStyle = "#fff";
+          context.stroke();
+          // 剪裁
+          context.clip();
+          // 填充图片
+          context.drawImage(img, 1000, 20, img.width, img.height);
+          context.restore();
+        };
+      }
+      clipTest();
+    </script>
+  </body>
+</html>

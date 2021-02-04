@@ -2,7 +2,7 @@
  * @Author: zulezhe
  * @Date: 2021-01-29 15:15:31
  * @LastEditors: zulezhe
- * @LastEditTime: 2021-02-01 18:23:22
+ * @LastEditTime: 2021-02-04 14:39:32
  * @Description: In User Settings Edit
  * @FilePath: \canvas\02-进阶\07.判断.html
 -->
@@ -12,9 +12,68 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      canvas {
+        outline: 2px dashed red;
+      }
+    </style>
   </head>
   <body>
-    <!-- isPointInStroke();是否在描边路径上  isPointInPath()是否在路径中 -->
-    <script></script>
+    <canvas id="canvas"></canvas>
+    <script>
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+      canvas.width = document.body.offsetWidth - 100;
+      canvas.height = document.body.offsetHeight - 50;
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.lineWidth = 8;
+      ctx.rect(100, 100, 300, 200);
+      ctx.strokeStyle = "red";
+      ctx.stroke();
+      document.body.addEventListener("mousedown", function (e) {
+        let isIn = isPointInStroke(event, canvas);
+        console.log(isIn);
+        if (isIn) {
+          ctx.strokeStyle = "yellow";
+          ctx.stroke();
+        } else {
+          ctx.strokeStyle = "red";
+          ctx.stroke();
+        }
+      });
+      /**
+       * isPointInStroke();是否在描边路径上
+       *
+       * 只有在stroke的路径才是true,在内部和在外部返回false,线越宽范围越大
+       */
+      function isPointInStroke(event, canvas) {
+        let rect = canvas.getBoundingClientRect();
+        return ctx.isPointInStroke(event.x - rect.left, event.y - rect.top);
+      }
+      /**
+       *  isPointInPath(x,y,fillRule)是否在路径中
+       * fillRule 判断原则,默认为非零环绕原则
+       * 某个点是否在当前路径中
+       * 在路径的线上和路径组成的区域内部都是true,路径外是false
+       */
+      function isPointInPath(event, canvas) {
+        let rect = canvas.getBoundingClientRect();
+        return ctx.isPointInPath(event.x - rect.left, event.y - rect.top);
+      }
+    </script>
   </body>
 </html>
