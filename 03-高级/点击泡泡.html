@@ -45,7 +45,7 @@
             let circle = new Ball(mouse.x, mouse.y, innerRadius, "#f4433699");
             var opacticy = 0.6;
             (function animation() {
-              requestAnimationFrame(animation);
+              // requestAnimationFrame(animation);
               ctx.clearRect(0, 0, cnv.width, cnv.height);
               balls.forEach((item) => {
                 item.draw("fill");
@@ -97,8 +97,8 @@
           }
           ctx.save();
           ctx.translate(this.x, this.y);
-          console.log(this.sx, this.sy);
-          ctx.scale(this.sx, this.sy);
+          // console.log(this.sx, this.sy);
+          // ctx.scale(this.sx, this.sy);
           ctx.fillStyle = this.color;
           ctx.strokeStyle = this.color;
           ctx.beginPath();
