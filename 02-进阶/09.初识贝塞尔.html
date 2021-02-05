@@ -2,7 +2,7 @@
  * @Author: zulezhe
  * @Date: 2021-01-29 14:52:16
  * @LastEditors: zulezhe
- * @LastEditTime: 2021-02-04 17:59:20
+ * @LastEditTime: 2021-02-04 18:23:32
  * @Description: In User Settings Edit
  * @FilePath: \canvas\02-进阶\09.初识贝塞尔.html
 -->
@@ -93,6 +93,15 @@
         context.fillText("(250, 100)", 250, 100);
         context.bezierCurveTo(203, 78, 82, 150, 250, 100);
         context.stroke();
+        ctx.beginPath();
+        ctx.moveTo(75, 25);
+        ctx.quadraticCurveTo(25, 25, 25, 62.5);
+        ctx.quadraticCurveTo(25, 100, 50, 100);
+        ctx.quadraticCurveTo(50, 120, 30, 125);
+        ctx.quadraticCurveTo(60, 120, 65, 100);
+        ctx.quadraticCurveTo(125, 100, 125, 62.5);
+        ctx.quadraticCurveTo(125, 25, 75, 25);
+        ctx.stroke();
         context.restore();
       }
 

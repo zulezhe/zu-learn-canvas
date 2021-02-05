@@ -1,0 +1,117 @@
+<!--
+ * @Author: zulezhe
+ * @Date: 2021-02-05 10:05:59
+ * @LastEditors: zulezhe
+ * @LastEditTime: 2021-02-05 14:50:27
+ * @Description: In User Settings Edit
+ * @FilePath: \canvas\02-进阶\鼠标点击泡泡动画.html
+--><!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        background-color: #000;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      canvas {
+        outline: 1px solid red;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      /***
+       * 需求: 鼠标点击某一个区域,出现随机数量,随机颜色,随机大小的泡泡,并且泡泡的大小会逐渐变小,而且泡泡的的位置是向外扩散的效果
+       *
+       * 分析:
+       *    首先点击的时候出现随机数量,随机颜色,随机大小的泡泡很容易实现,关键是泡泡的扩散效果稍微要麻烦一点。
+       * 我们知道在canvas中已经生成的canvas图像是无法更改状态的,所以需要实现动画效果的话一般是清除原有的图像然后生成不同位置不同
+       * 状态的新图像,所以这里的扩散效果也就是需要不断清除原有的状态,绘制新的图像就行了
+       *
+       *  然后:就是计算扩散的坐标点,扩散的时候每个
+       */
+      class Hubble {
+        constructor(el) {
+          const container = el ? document.getElementById(el) : document.body;
+          this.canvas = document.createElement("canvas");
+          this.ctx = this.canvas.getContext("2d");
+          this.width = container.offsetWidth;
+          this.height = container.offsetHeight;
+          this.canvas.width = this.width;
+          this.canvas.height = this.height;
+          container.appendChild(this.canvas);
+          //创建的泡泡的数组
+          this.hubbleList = [];
+        }
+        draw(x, y, r, color, sx = 1, sy = 1) {
+          this.ctx.save();
+          this.ctx.beginPath();
+          this.ctx.translate(x, y);
+          this.ctx.scale(sx, sy);
+          this.ctx.fillStyle = color;
+          this.ctx.arc(0, 0, r, 0, 360 * (Math.PI / 180));
+          this.ctx.fill();
+          this.ctx.closePath();
+          this.ctx.restore();
+        }
+        create() {}
+      }
+      /**
+       *鼠标点击事件
+       */
+      class Mouse {
+        constructor() {
+          this.x = 0;
+          this.y = 0;
+        }
+        //获取鼠标点击位置
+        getMousePosition(dom, callback) {
+          dom.addEventListener("mousedown", (e) => {
+            this.x = e.clientX - dom.offsetLeft;
+            this.y = e.clientY - dom.offsetTop;
+            callback({ x: this.x, y: this.y });
+          });
+        }
+      }
+      //随机工具类
+      class Random {
+        randomCount(count = 10) {
+          return Math.ceil(Math.random() * count);
+        }
+        randomColor() {
+          var r = Math.floor(Math.random() * 256); //随机生成256以内r值
+          var g = Math.floor(Math.random() * 256); //随机生成256以内g值
+          var b = Math.floor(Math.random() * 256); //随机生成256以内b值
+          var alpha = Math.random(); //随机生成1以内a值
+          return `rgb(${r},${g},${b},${alpha})`; //返回rgba(r,g,b,a)格式颜色
+        }
+      }
+      const hubble = new Hubble();
+      const random = new Random();
+      const mouse = new Mouse();
+      const count = 20;
+      let innerRadius = 30;
+      mouse.getMousePosition(document.querySelector("canvas"), (event) => {
+        const scale = 0.05;
+        for (let i = 0; i < count; i++) {
+          // let offsetx = random.randomCount(100);
+          // let offsety = random.randomCount(100);
+          let radius = random.randomCount(50);
+          let color = random.randomColor();
+          let offsetx = event.x + Math.random() * innerRadius - Math.random() * innerRadius;
+          let offsety = event.y + Math.random() * innerRadius - Math.random() * innerRadius;
+          hubble.draw(event.x + offsetx, event.y + offsety, radius, color);
+        }
+      });
+    </script>
+  </body>
+</html>

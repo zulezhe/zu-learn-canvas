@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>贝塞尔曲线</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  </head>
+
+  <body>
+    <!-- style="border:1px solid red;" -->
+    <canvas id="myCanvas" width="815" height="615"> 您的浏览器不支持 HTML5 canvas 标签。 </canvas>
+    <script type="text/javascript">
+      var t = 500; //点个数
+      var now_index = 80; //当前画点位置
+
+      var an_points = [
+        50.0,
+        200.0, //起点
+        250.0,
+        200.0, //终点
+      ];
+
+      var quadratic_points = [
+        50.0,
+        50.0, //起点
+        50.0,
+        200.0, //控制点
+        200.0,
+        200.0, //终点
+      ];
+
+      var cubic_points = [
+        50.0,
+        50.0, //起点
+        250.0,
+        300.0, //控制点
+        450.0,
+        60.0, //控制点
+        650.0,
+        250.0, //终点
+      ];
+
+      var quartic_points = [
+        100.0,
+        300.0, //起点
+        50.0,
+        50.0, //控制点
+        450.0,
+        100.0, //控制点
+        650.0,
+        300.0, //控制点
+        750.0,
+        50.0, //终点
+      ];
+
+      var five_points = [
+        100.0,
+        300.0, //起点
+        50.0,
+        50.0, //控制点
+        250.0,
+        300.0, //控制点
+        450.0,
+        50.0, //控制点
+        650.0,
+        50.0, //控制点
+        550.0,
+        250.0, //终点
+      ];
+
+      window.addEventListener("load", function () {
+        initCanvas();
+      });
+
+      var ctx = null;
+
+      function initCanvas() {
+        var c = document.getElementById("myCanvas");
+        ctx = c.getContext("2d");
+        ctx.textBaseline = "bottom";
+        //画XY轴
+        drawXLine();
+        drawYLine();
+        //重定义原点（5,5）
+        // ctx.translate(5, 5);
+        //画一次贝塞尔曲线
+        // drawAnPoints()
+        //画二次贝塞尔曲线
+        // drawQuadraticPoints()
+        //三次贝塞尔曲线
+        // drawCubicPoints()
+        //四次贝塞尔曲线
+        // drawQuarticPoints()
+        //五次贝塞尔曲线
+        // drawFivePoints()
+        //画二次贝塞尔曲线及所有辅助点辅助线
+        drawQuadraticAllPoints();
+      }
+      //画二次贝塞尔曲线及所有辅助点辅助线
+      function drawQuadraticAllPoints() {
+        ctx.clearRect(0, 0, 800, 300);
+        var points = quadratic_points;
+        //画起始点
+        drawStartingPoint(points);
+        //画辅助线
+        drawAuxiliaryLine(points);
+        //画中间点（1个）
+        //所在位置
+        var percentage = (1.0 * now_index) / t;
+        //计算坐标
+        //(D，F)点=(P2-P1)*percentage+P1
+        var d_point_x = (points[2] - points[0]) * percentage + points[0];
+        var d_point_y = (points[3] - points[1]) * percentage + points[1];
+        var f_point_x = (points[4] - points[2]) * percentage + points[2];
+        var f_point_y = (points[5] - points[3]) * percentage + points[3];
+        drawPoint("D", d_point_x, d_point_y);
+        drawPoint("F", f_point_x, f_point_y);
+        //画DF线段
+        drawLine(d_point_x, d_point_y, f_point_x, f_point_y);
+        //画H点
+        var h_point_x = (f_point_x - d_point_x) * percentage + d_point_x;
+        var h_point_y = (f_point_y - d_point_y) * percentage + d_point_y;
+        drawPoint("H", h_point_x, h_point_y, (wordColor = "blue"));
+        // console.log(d_point_x, d_point_y,f_point_x, f_point_y,h_point_x, h_point_y)
+        // if (now_index < t) {
+        //   now_index++
+        //   requestAnimationFrame(drawQuadraticAllPoints)
+        // }
+      }
+      //五次贝塞尔曲线
+      function drawFivePoints() {
+        //画起始点
+        drawStartingPoint(five_points);
+        //画辅助线
+        drawAuxiliaryLine(five_points);
+        //画各点
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = "green";
+        for (let i = 0.0; i <= 1.0; i += 1.0 / t) {
+          ctx.beginPath();
+          ctx.arc(...getPoint(five_points, i), 1, 0, 2 * Math.PI);
+          // ctx.fill()
+          ctx.stroke();
+        }
+      }
+      //四次贝塞尔曲线
+      function drawQuarticPoints() {
+        //画起始点
+        drawStartingPoint(quartic_points);
+        //画辅助线
+        drawAuxiliaryLine(quartic_points);
+        //画各点
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = "green";
+        for (let i = 0.0; i <= 1.0; i += 1.0 / t) {
+          ctx.beginPath();
+          ctx.arc(...getPoint(quartic_points, i), 1, 0, 2 * Math.PI);
+          // ctx.fill()
+          ctx.stroke();
+        }
+      }
+      //三次贝塞尔曲线
+      function drawCubicPoints() {
+        //画起始点
+        drawStartingPoint(cubic_points);
+        //画辅助线
+        drawAuxiliaryLine(cubic_points);
+        //画各点
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = "green";
+        for (let i = 0.0; i <= 1.0; i += 1.0 / t) {
+          ctx.beginPath();
+          ctx.arc(...getPoint(cubic_points, i), 1, 0, 2 * Math.PI);
+          // ctx.fill()
+          ctx.stroke();
+        }
+      }
+      //二次贝塞尔曲线
+      function drawQuadraticPoints() {
+        //画起始点
+        drawStartingPoint(quadratic_points);
+        //画辅助线
+        drawAuxiliaryLine(quadratic_points);
+        //画各点
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = "green";
+        for (let i = 0.0; i <= 1.0; i += 1.0 / t) {
+          ctx.beginPath();
+          ctx.arc(...getPoint(quadratic_points, i), 1, 0, 2 * Math.PI);
+          // ctx.fill()
+          ctx.stroke();
+        }
+      }
+      //一次贝塞尔曲线
+      function drawAnPoints() {
+        //画起始点
+        drawStartingPoint(an_points);
+        //画辅助线
+        drawAuxiliaryLine(an_points);
+        //画各点
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = "green";
+        var intervalX = (an_points[2] - an_points[0]) / t;
+        var intervalY = (an_points[3] - an_points[1]) / t;
+        var point_x = 0.0,
+          point_y = 0.0;
+        for (let i = 0.0; i <= 1.0; i += 1.0 / t) {
+          ctx.beginPath();
+          ctx.arc(...getPoint(an_points, i), 1, 0, 2 * Math.PI);
+          // ctx.fill()
+          ctx.stroke();
+        }
+      }
+      //画一条线
+      function drawLine(x1, y1, x2, y2, color = "green") {
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+      }
+      //画一个点
+      function drawPoint(word, x, y, wordColor = "green", pointColor = "red") {
+        ctx.strokeStyle = pointColor;
+        ctx.fillStyle = pointColor;
+        ctx.beginPath();
+        ctx.arc(x, y, 2, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.stroke();
+        ctx.fillStyle = wordColor;
+        ctx.textAlign = "start";
+        ctx.font = "15px Arial";
+        ctx.fillText(word, x + 5, y - 5);
+      }
+      //获取各点
+      function getPoint(points, percentage) {
+        if (points.length == 2) {
+          return points;
+        }
+        var _points = [];
+        let point_x = 0.0;
+        let point_y = 0.0;
+        for (let i = 0; i < points.length - 2; i += 2) {
+          point_x = (points[i + 2] - points[i]) * percentage + points[i];
+          point_y = (points[i + 3] - points[i + 1]) * percentage + points[i + 1];
+          _points.push(point_x);
+          _points.push(point_y);
+        }
+        return getPoint(_points, percentage);
+      }
+      //画辅助线
+      function drawAuxiliaryLine(points) {
+        ctx.strokeStyle = "rgba(125, 125, 125, 0.6)";
+        ctx.lineWidth = 1;
+        for (let i = 0; i < points.length - 2; i += 2) {
+          ctx.beginPath();
+          ctx.moveTo(points[i], points[i + 1]);
+          ctx.lineTo(points[i + 2], points[i + 3]);
+          ctx.stroke();
+        }
+      }
+      //画起始及控制点
+      function drawStartingPoint(points) {
+        ctx.strokeStyle = "red";
+        for (let i = 0; i < points.length; i += 2) {
+          ctx.fillStyle = "red";
+          ctx.beginPath();
+          ctx.arc(points[i], points[i + 1], 2, 0, 2 * Math.PI);
+          ctx.fill();
+          ctx.stroke();
+          ctx.fillStyle = "black";
+          ctx.textAlign = "start";
+          ctx.font = "15px Arial";
+          ctx.fillText("P" + (i / 2 + 1), points[i] + 5, points[i + 1] - 5);
+        }
+      }
+      //画X轴
+      function drawXLine() {
+        ctx.beginPath();
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = "#409EFF";
+        ctx.moveTo(5, 5);
+        ctx.lineTo(815, 5);
+        ctx.lineTo(810, 10);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(815, 5);
+        ctx.lineTo(810, 0);
+        ctx.stroke();
+        ctx.beginPath();
+        for (let i = 0; i < 80; i++) {
+          ctx.moveTo(i * 10 + 5, 5);
+          ctx.lineTo(i * 10 + 5, 0);
+          ctx.stroke();
+        }
+      }
+      //画Y轴
+      function drawYLine() {
+        ctx.beginPath();
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = "#409EFF"; // Green path
+        ctx.moveTo(5, 5);
+        ctx.lineTo(5, 315);
+        ctx.lineTo(10, 310);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(5, 315);
+        ctx.lineTo(0, 310);
+        ctx.stroke();
+        ctx.beginPath();
+        for (let i = 0; i < 30; i++) {
+          ctx.moveTo(5, i * 10 + 5);
+          ctx.lineTo(0, i * 10 + 5);
+          ctx.stroke();
+        }
+      }
+    </script>
+  </body>
+</html>
