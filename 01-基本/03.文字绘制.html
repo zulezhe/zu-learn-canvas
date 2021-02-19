@@ -2,7 +2,7 @@
  * @Author: zulezhe
  * @Date: 2021-01-13 11:19:20
  * @LastEditors: zulezhe
- * @LastEditTime: 2021-01-28 15:33:30
+ * @LastEditTime: 2021-02-18 16:26:35
  * @Description: In User Settings Edit
  * @FilePath: \canvas\01-基本\03.文字绘制.html
 -->
@@ -40,7 +40,6 @@
         ctx.beginPath();
         ctx.strokeStyle = "red";
         ctx.strokeText("strokeText文字", 100, 100);
-
         /**
          * 填充文字:
          * fillText(text, x, y, maxWidth);
@@ -56,7 +55,7 @@
          */
         ctx.beginPath();
         ctx.fillStyle = "red";
-        ctx.fillText("fillText文字", 300, 100, 10);
+        ctx.fillText("超出宽度的文字", 300, 100, 10);
 
         /**
          * 设置文字居中

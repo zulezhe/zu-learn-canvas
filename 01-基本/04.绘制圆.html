@@ -2,7 +2,7 @@
  * @Author: zulezhe
  * @Date: 2021-01-18 16:29:13
  * @LastEditors: zulezhe
- * @LastEditTime: 2021-01-20 18:00:07
+ * @LastEditTime: 2021-02-18 17:28:39
  * @Description: In User Settings Edit
  * @FilePath: \canvas\01-基本\04.绘制圆.html
 -->
@@ -94,14 +94,20 @@
         ctx.beginPath();
         ctx.moveTo(600, 600);
         ctx.lineTo(750, 600);
+
+        ctx.strokeText("750,600", 750, 600);
+        ctx.strokeText("800, 600", 800, 600);
+        ctx.strokeText("800, 650", 800, 650);
+
         ctx.arcTo(800, 600, 800, 650, 50);
+        ctx.strokeText("800, 850", 800, 850);
         ctx.lineTo(800, 850);
-        ctx.strokeStyle = "red";
+        ctx.strokeStyle = "blue";
         ctx.stroke();
 
-        // 绘制一个1/4圆,半径为100,逆时针旋转
+        // 绘制一个1/4圆,半径为100,顺时针
         ctx.beginPath();
-        ctx.arc(800, 300, 100, 0, (Math.PI / 180) * 90, true);
+        ctx.arc(800, 300, 100, 0, (Math.PI / 180) * 90, false);
         ctx.stroke();
       };
     </script>

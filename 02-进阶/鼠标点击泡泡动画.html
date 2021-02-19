@@ -2,7 +2,7 @@
  * @Author: zulezhe
  * @Date: 2021-02-05 10:05:59
  * @LastEditors: zulezhe
- * @LastEditTime: 2021-02-05 15:51:51
+ * @LastEditTime: 2021-02-18 10:10:10
  * @Description: In User Settings Edit
  * @FilePath: \canvas\02-进阶\鼠标点击泡泡动画.html
 --><!DOCTYPE html>
@@ -63,7 +63,10 @@
           this.ctx.closePath();
           this.ctx.restore();
         }
-        create() {}
+        animate() {}
+        clear(x, y, width, height) {
+          this.ctx.clearRect(x, y, this.width, this.height);
+        }
       }
       /**
        *鼠标点击事件
@@ -102,6 +105,7 @@
       let innerRadius = 50;
       mouse.getMousePosition(document.querySelector("canvas"), (event) => {
         const scale = 0.05;
+        hubble.clear(0, 0);
         for (let i = 0; i < count; i++) {
           // 这一步是随机生成圆的偏移坐标,生成的随机数可能是正的也可能是负的,两个随机数相减的结果就有正有负,所以
           // 点击以后就会根据鼠标点击的点在它的周围生成大小不一,位置遍布的规定个数和随机颜色的圆

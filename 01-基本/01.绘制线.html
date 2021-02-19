@@ -2,7 +2,7 @@
  * @Author: zulezhe
  * @Date: 2021-01-13 11:19:20
  * @LastEditors: zulezhe
- * @LastEditTime: 2021-01-20 15:54:02
+ * @LastEditTime: 2021-02-18 13:50:27
  * @Description: In User Settings Edit
  * @FilePath: \canvas\01-基本\01.绘制线.html
 -->
@@ -39,7 +39,6 @@
         ctx.lineTo(300, 50);
         ctx.strokeStyle = "red";
         ctx.stroke();
-
         // 绘制一条折线
         ctx.beginPath();
         ctx.moveTo(100, 500); //画笔的起点
@@ -48,7 +47,6 @@
         ctx.lineTo(400, 400); //当前画笔的终点
         ctx.strokeStyle = "red"; //画笔的颜色
         ctx.stroke(); //开始描边
-
         // 设置线宽:lineWidth
         ctx.beginPath();
         ctx.moveTo(150, 150);
@@ -85,12 +83,10 @@
         ctx.lineTo(600, 800);
         ctx.lineCap = "square";
         ctx.stroke();
-
         // 参考线
         ctx.beginPath();
         ctx.moveTo(600, 400);
         ctx.lineTo(600, 900);
-
         ctx.moveTo(400, 400);
         ctx.lineTo(400, 900);
         ctx.lineWidth = 0.5;
@@ -140,7 +136,6 @@
         ctx.lineWidth = 1;
         ctx.strokeStyle = "#000";
         ctx.stroke();
-
         /**
          *  绘制虚线
          *  ctx.setLineDash(segments);
