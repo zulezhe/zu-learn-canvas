@@ -2,7 +2,43 @@
  * @Author: zulezhe
  * @Date: 2021-01-13 14:28:14
  * @LastEditors: zulezhe
- * @LastEditTime: 2021-01-13 14:28:15
+ * @LastEditTime: 2021-02-20 18:16:52
  * @Description: In User Settings Edit
- * @FilePath: \canvas\02进阶\06.登陆验证码.html
+ * @FilePath: \canvas\03-高级\登陆验证码.html
 -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>登陆验证码</title>
+    <style>
+      canvas {
+        outline: 1px solid red;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas"> 你的浏览器不支持canvas哦 </canvas>
+    <script>
+      const canvas = document.getElementById("canvas");
+      canvas.width = 200;
+      canvas.height = 50;
+      const ctx = canvas.getContext("2d");
+      /**
+       *绘制验证码
+       * ctx {*} canvas上下文
+       * dig {*} 验证码的位数
+       * consult {*} 验证码
+       */
+      function drawAuthCode(ctx) {
+        let str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        let newStr = str.split("");
+        console.log(newStr);
+      }
+      drawAuthCode(ctx);
+      //绘制杂点
+    </script>
+  </body>
+</html>

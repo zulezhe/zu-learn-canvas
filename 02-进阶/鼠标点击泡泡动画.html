@@ -2,7 +2,7 @@
  * @Author: zulezhe
  * @Date: 2021-02-05 10:05:59
  * @LastEditors: zulezhe
- * @LastEditTime: 2021-02-18 10:10:10
+ * @LastEditTime: 2021-02-20 17:53:50
  * @Description: In User Settings Edit
  * @FilePath: \canvas\02-进阶\鼠标点击泡泡动画.html
 --><!DOCTYPE html>
@@ -39,83 +39,105 @@
        *
        *  然后:就是计算扩散的坐标点,扩散的时候每个
        */
-      class Hubble {
-        constructor(el) {
-          const container = el ? document.getElementById(el) : document.body;
-          this.canvas = document.createElement("canvas");
-          this.ctx = this.canvas.getContext("2d");
-          this.width = container.offsetWidth;
-          this.height = container.offsetHeight;
-          this.canvas.width = this.width;
-          this.canvas.height = this.height;
-          container.appendChild(this.canvas);
-          //创建的泡泡的数组
-          this.hubbleList = [];
+      class Ball {
+        constructor(x, y, radius, color) {
+          this.x = x;
+          this.y = y;
+          this.color = color;
+          this.radius = radius;
+          this.width = width;
+          this.height = height;
+          this.ctx = ctx;
+          this.scaleX = 1;
+          this.scaleY = 1;
+          this.vx = 0;
+          this.vy = 0;
         }
-        draw(x, y, r, color, sx = 1, sy = 1) {
+        draw() {
           this.ctx.save();
           this.ctx.beginPath();
-          this.ctx.translate(x, y);
-          this.ctx.scale(sx, sy);
-          this.ctx.fillStyle = color;
-          this.ctx.arc(0, 0, r, 0, 360 * (Math.PI / 180));
+          // 球球的移动
+          this.ctx.translate(this.x, this.y);
+          // 球球的缩小
+          this.ctx.scale(this.scaleX, this.scaleY);
+          this.ctx.fillStyle = this.color;
+          this.ctx.arc(0, 0, this.radius, 0, 360 * (Math.PI / 180));
           this.ctx.fill();
           this.ctx.closePath();
           this.ctx.restore();
         }
-        animate() {}
-        clear(x, y, width, height) {
-          this.ctx.clearRect(x, y, this.width, this.height);
-        }
       }
       /**
-       *鼠标点击事件
+       * 随机数量
        */
-      class Mouse {
-        constructor() {
-          this.x = 0;
-          this.y = 0;
-        }
-        //获取鼠标点击位置
-        getMousePosition(dom, callback) {
-          dom.addEventListener("mousedown", (e) => {
-            this.x = e.clientX - dom.offsetLeft;
-            this.y = e.clientY - dom.offsetTop;
-            callback({ x: this.x, y: this.y });
-          });
-        }
+      function randomCount(count = 10) {
+        return Math.ceil(Math.random() * count);
       }
-      //随机工具类
-      class Random {
-        randomCount(count = 10) {
-          return Math.ceil(Math.random() * count);
-        }
-        randomColor() {
-          var r = Math.floor(Math.random() * 256); //随机生成256以内r值
-          var g = Math.floor(Math.random() * 256); //随机生成256以内g值
-          var b = Math.floor(Math.random() * 256); //随机生成256以内b值
-          var alpha = Math.random(); //随机生成1以内a值
-          return `rgb(${r},${g},${b},${alpha})`; //返回rgba(r,g,b,a)格式颜色
-        }
+      /**
+       * 随机颜色
+       */
+      function randomColor() {
+        var r = Math.floor(Math.random() * 256); //随机生成256以内r值
+        var g = Math.floor(Math.random() * 256); //随机生成256以内g值
+        var b = Math.floor(Math.random() * 256); //随机生成256以内b值
+        var alpha = Math.random(); //随机生成1以内a值
+        return `rgb(${r},${g},${b},${alpha})`; //返回rgba(r,g,b,a)格式颜色
       }
-      const hubble = new Hubble();
-      const random = new Random();
-      const mouse = new Mouse();
+
+      // 使用
+      const container = document.body;
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      let width = container.offsetWidth;
+      let height = container.offsetHeight;
+      canvas.width = width;
+      canvas.height = height;
+      container.appendChild(canvas);
       const count = 20;
-      let innerRadius = 50;
-      mouse.getMousePosition(document.querySelector("canvas"), (event) => {
-        const scale = 0.05;
-        hubble.clear(0, 0);
+      let easing = 0.05;
+      let opacticy = 0.6;
+      let innerRadius = 30;
+      let outterRadius = 150;
+      let moreOutterRadius = 200;
+      canvas.addEventListener("mousedown", (event) => {
+        const ballList = [];
         for (let i = 0; i < count; i++) {
           // 这一步是随机生成圆的偏移坐标,生成的随机数可能是正的也可能是负的,两个随机数相减的结果就有正有负,所以
           // 点击以后就会根据鼠标点击的点在它的周围生成大小不一,位置遍布的规定个数和随机颜色的圆
-          let offsetx = random.randomCount(50) - random.randomCount(50);
-          let offsety = random.randomCount(50) - random.randomCount(50);
-          let radius = random.randomCount(50);
-          let color = random.randomColor();
-          console.log(offsetx, offsety);
-          hubble.draw(event.x + offsetx, event.y + offsety, radius, color);
+          let offsetx = randomCount(50) - randomCount(50);
+          let offsety = randomCount(50) - randomCount(50);
+          let radius = randomCount(50);
+          let color = randomColor();
+          const ball = new Ball(event.x + offsetx, event.y + offsety, radius, color);
+          //=========
+          ball.x = event.x + Math.random() * innerRadius - Math.random() * innerRadius;
+          ball.y = event.y + Math.random() * innerRadius - Math.random() * innerRadius;
+          var x = event.x - ball.x;
+          var y = event.y - ball.y;
+          var scale = Math.abs(x / y);
+          ball.dx = (((x < 0 ? 1 : -1) * moreOutterRadius) / Math.sqrt(scale * scale + 1)) * Math.random() * scale + event.x;
+          ball.dy = (((y < 0 ? 1 : -1) * moreOutterRadius) / Math.sqrt(scale * scale + 1)) * Math.random() + event.y;
+          //=========
+          ballList.push(ball);
+          ball.draw();
         }
+        (function animate() {
+          ctx.clearRect(0, 0, width, height);
+          requestAnimationFrame(animate);
+          ballList.map((item) => {
+            //判断圆球的扩散方向
+            //============
+            item.vx = (item.dx - item.x) * easing;
+            item.vy = (item.dy - item.y) * easing;
+            item.x += item.vx;
+            item.y += item.vy;
+            console.log(item.x, item.y);
+            //============
+            item.scaleX += -item.scaleX * easing;
+            item.scaleY += -item.scaleY * easing;
+            item.draw();
+          });
+        })();
       });
     </script>
   </body>
