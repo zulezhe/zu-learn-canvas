@@ -2,7 +2,7 @@
  * @Author: zulezhe
  * @Date: 2021-01-13 14:28:14
  * @LastEditors: zulezhe
- * @LastEditTime: 2021-02-20 18:16:52
+ * @LastEditTime: 2021-02-22 12:00:35
  * @Description: In User Settings Edit
  * @FilePath: \canvas\03-高级\登陆验证码.html
 -->
@@ -16,29 +16,111 @@
     <style>
       canvas {
         outline: 1px solid red;
+        cursor: pointer;
       }
     </style>
   </head>
   <body>
     <canvas id="canvas"> 你的浏览器不支持canvas哦 </canvas>
+    <input type="text" id="value" />
+    <button onclick="handleChecking()">验证</button>
     <script>
-      const canvas = document.getElementById("canvas");
-      canvas.width = 200;
-      canvas.height = 50;
-      const ctx = canvas.getContext("2d");
-      /**
-       *绘制验证码
-       * ctx {*} canvas上下文
-       * dig {*} 验证码的位数
-       * consult {*} 验证码
-       */
-      function drawAuthCode(ctx) {
-        let str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        let newStr = str.split("");
-        console.log(newStr);
+      class MyAuthCode {
+        constructor(id, width, height, digit) {
+          this.canvas = document.getElementById(id);
+          this.canvas.width = width;
+          this.canvas.height = height;
+          this.ctx = canvas.getContext("2d");
+          this.digit = digit;
+          this.authCode = "";
+          this.drawAuthCode(this.ctx, this.digit);
+          this.drawConfuse(this.ctx);
+          this.click();
+        }
+        /**
+         * 绘制验证码
+         */
+        drawAuthCode(ctx, digit, str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") {
+          let newStr = str.split("");
+          let colorList = ["red", "blue", "Purple", "DoderBlue", "DarkGreen"];
+          let arr = [];
+          let anthCode = "";
+          for (let i = 0; i < digit; i++) {
+            let count = Math.floor(Math.random() * str.length);
+            arr.push(newStr[count]);
+            anthCode += newStr[count];
+          }
+          ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+          for (let i = 0; i < arr.length; i++) {
+            const item = arr[i];
+            ctx.save();
+            ctx.beginPath();
+            ctx.font = "24px yahei";
+            ctx.translate(i * 16 + 10, 0);
+            ctx.rotate((Math.PI / 180) * Math.random() * 40);
+            ctx.fillStyle = colorList[Math.floor(Math.random() * colorList.length)];
+            ctx.fillText(item, 5, 20);
+            ctx.fill();
+            ctx.restore();
+          }
+          console.log(arr, anthCode);
+          this.authCode = anthCode;
+        }
+        /**
+         * 绘制噪点
+         */
+        drawConfuse(ctx) {
+          let width = Math.floor(Math.random() * this.canvas.width);
+          let height = Math.floor(Math.random() * this.canvas.height);
+          ctx.save();
+          for (let i = 1; i < width; i++) {
+            ctx.beginPath();
+            ctx.arc(Math.floor(Math.random() * this.canvas.width), Math.floor(Math.random() * this.canvas.height), 2, 0, (Math.PI / 180) * 360, false);
+            ctx.fillStyle = "pink";
+            ctx.fill();
+          }
+          ctx.fill();
+          ctx.restore();
+        }
+        /**
+         * 获取上下文
+         */
+        getContext() {
+          return this.ctx;
+        }
+        /**
+         * 获取验证码
+         */
+        getAuthCode() {
+          return this.authCode;
+        }
+        /**
+         * 随机颜色
+         */
+        randomColor() {
+          let color = `rgba(${Math.floor(Math.random() * 200)}, ${Math.floor(Math.random() * 200)}, ${Math.floor(Math.random() * 200)}, ${Math.random() + 0.3})`;
+          return color;
+        }
+        /**
+         * 点击canvas变化验证码
+         */
+        click() {
+          this.canvas.addEventListener("click", (event) => {
+            this.drawAuthCode(this.ctx, this.digit);
+            this.drawConfuse(this.ctx, this.canvas);
+          });
+        }
       }
-      drawAuthCode(ctx);
-      //绘制杂点
+
+      /**
+       * 使用
+       */
+      let authCode = new MyAuthCode("canvas", 100, 30, 4);
+      function handleChecking() {
+        let value = document.getElementById("value").value;
+        console.log(value);
+        console.log(authCode.getAuthCode().toLowerCase() == value.toLowerCase());
+      }
     </script>
   </body>
 </html>
