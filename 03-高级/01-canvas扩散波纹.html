@@ -1,0 +1,90 @@
+<!--
+ * @Author: zulezhe
+ * @Date: 2021-01-13 14:05:36
+ * @LastEditors: zulezhe
+ * @LastEditTime: 2021-02-22 17:03:34
+ * @Description: In User Settings Edit
+ * @FilePath: \canvas\03-高级\01-canvas扩散波纹.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+      }
+      canvas {
+        background-color: #000;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas"> </canvas>
+    <script>
+      const canvas = document.getElementById("canvas");
+      canvas.width = document.body.offsetWidth;
+      canvas.height = document.body.offsetHeight;
+      const ctx = canvas.getContext("2d");
+      let radius = 50;
+      let scale = 0.5;
+      let alpha = 1;
+      canvas.addEventListener("click", (event) => {
+        let x = event.offsetX;
+        let y = event.offsetY;
+      });
+      function drawArc(radius, x, y, alpha) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(x, y, radius - 40, 0, (Math.PI / 180) * 360);
+        let gradient0 = ctx.createRadialGradient(x, y, 0, x, y, radius - 40);
+        gradient0.addColorStop(0, "rgba(220, 20, 60," + alpha + ")");
+        gradient0.addColorStop(1, "rgba(220, 20, 60," + alpha + ")");
+        ctx.fillStyle = gradient0;
+        ctx.fill();
+        ctx.restore();
+        ctx.save();
+        ctx.beginPath();
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(x, y, radius - 30, 0, (Math.PI / 180) * 360);
+        let gradient = ctx.createRadialGradient(x, y, 0, x, y, radius - 30);
+        gradient.addColorStop(0, "rgba(220, 20, 60," + alpha + ")");
+        gradient.addColorStop(1, "rgba(220, 20, 60," + alpha + ")");
+        ctx.fillStyle = gradient;
+        ctx.fill();
+        ctx.restore();
+        ctx.save();
+        ctx.beginPath();
+
+        ctx.arc(x, y, radius - 20, 0, (Math.PI / 180) * 360);
+        let gradient2 = ctx.createRadialGradient(x, y, 0, x, y, radius + 20);
+        gradient2.addColorStop(0, "rgba(220, 60, 60," + alpha + ")");
+        gradient2.addColorStop(1, "rgba(220, 60, 60," + alpha + ")");
+        ctx.fillStyle = gradient2;
+        ctx.fill();
+        ctx.restore();
+      }
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if (radius < 100) {
+          radius += scale;
+          alpha -= 0.006;
+        } else {
+          radius = 50;
+          alpha = 1;
+        }
+        console.log(alpha);
+        drawArc(radius, 100, 100, alpha);
+        requestAnimationFrame(animate);
+      }
+      animate();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,70 @@
+<!--
+ * @Author: zulezhe
+ * @Date: 2021-02-23 09:49:49
+ * @LastEditors: zulezhe
+ * @LastEditTime: 2021-02-23 09:49:58
+ * @Description: In User Settings Edit
+ * @FilePath: \canvas\07.demo收集\模拟血管\index.html
+-->
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0,user-scalable=no,minimal-ui" />
+    <title>模拟血液循环液体管道流动canvas动画</title>
+    <meta name="keywords" content="模拟,血液循环,液体,管道流动,canvas动画" />
+    <style>
+      body {
+        overflow: hidden;
+      }
+      canvas {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="c" width="1920" height="1080"></canvas>
+
+    <script>
+      function u(t) {
+        // dwitter code goes here
+
+        for (k = i = 960; --i; x.fill(x.arc(k + i + S((m = i + (t * k) / 4)) * (r = ((S(t + m / k) * 0.5 + 1.4) * 1e5) / i), 540 + C(m) * r, (s = 4e4 / i), 0, 7, (m = (i - t * k) | 0) % 59 || x.arc(k + i + (S((m = m ** 5)) * r) / 3, 540 + (C(m) * r) / 2, (s = r / 9), 0, 7)))) x.beginPath((x.fillStyle = R(i / 4)));
+      }
+
+      let time = 0;
+      let frame = 0;
+      let FPS = 60;
+      let x = c.getContext("2d");
+      let S = Math.sin;
+      let C = Math.cos;
+      let T = Math.tan;
+      let R = (r, g, b, a = 1) => `rgba(${r | 0},${g | 0},${b | 0},${a})`;
+
+      let loop = (frameTime) => {
+        requestAnimationFrame(loop);
+
+        // update time
+        time = frame++ / FPS;
+        u(time);
+
+        {
+          // fill window
+          const aspect = c.width / c.height;
+          if (aspect > innerWidth / innerHeight) {
+            c.style.height = "100%";
+            c.style.width = "";
+          } else {
+            c.style.width = "100%";
+            c.style.height = "";
+          }
+        }
+      };
+
+      loop();
+    </script>
+  </body>
+</html>

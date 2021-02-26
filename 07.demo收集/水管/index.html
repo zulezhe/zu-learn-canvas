@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>canvas管道流动动画</title>
+    <link rel="stylesheet" href="core.css" />
+    <link rel="stylesheet" href="core_ini.css" />
+    <script src="https://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+    <script src="zk_liudong.js"></script>
+    <style type="text/css">
+      html,
+      body {
+        background: #3e348e;
+      }
+      .main {
+        position: fixed;
+        width: 600px;
+        height: 300px;
+        left: 50%;
+        margin-left: -300px;
+        top: 50%;
+        margin-top: -300px;
+      }
+      .top {
+        position: absolute;
+        width: 580px;
+        top: 0px;
+        left: 10px;
+      }
+      .bottom {
+        position: absolute;
+        width: 580px;
+        bottom: 0px;
+        left: 10px;
+      }
+      .left {
+        position: absolute;
+        left: 0px;
+        top: 10px;
+        height: 280px;
+      }
+
+      .right {
+        position: absolute;
+        right: 0px;
+        top: 10px;
+        height: 280px;
+      }
+
+      #top {
+        position: absolute;
+        top: 3px;
+        z-index: 99;
+      }
+      #bottom {
+        position: absolute;
+        top: 6px;
+      }
+      #left {
+        position: absolute;
+        left: -130px;
+        top: 140px;
+      }
+      #right {
+        position: absolute;
+        left: -130px;
+        top: 140px;
+      }
+      .zjt1 {
+        position: absolute;
+        left: -12px;
+        top: -1px;
+        z-index: 999;
+      }
+
+      .zjt2 {
+        position: absolute;
+        left: -2px;
+        bottom: -12px;
+        z-index: 999;
+      }
+      .zjt3 {
+        position: absolute;
+        left: -1px;
+        bottom: -12px;
+        z-index: 999;
+      }
+      .zjt4 {
+        position: absolute;
+        right: -12px;
+        bottom: 0px;
+        z-index: 999;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main">
+      <div class="top conduit_w">
+        <canvas id="top"></canvas>
+        <div class="zjt1 adapter_2 rotate90"></div>
+        <div class="zjt4 adapter_2 rotate180"></div>
+      </div>
+      <div class="left conduit_h">
+        <canvas id="left" class="rotate270"></canvas>
+        <div class="zjt2 adapter_2"></div>
+      </div>
+      <div class="right conduit_h">
+        <canvas id="right" class="rotate90"></canvas>
+        <div class="zjt3 adapter_2 rotate270"></div>
+      </div>
+      <div class="bottom conduit_w r"><canvas id="bottom" class="rotate180"></canvas></div>
+    </div>
+  </body>
+  <script>
+    f1();
+    function f1() {
+      var data = {
+        time: 140, //运动速度
+        mx: 0, //起点位置
+        my: 6,
+        ly: 6,
+        canvas_w: 580,
+        canvas_h: 10,
+        color: "#3c3c3c", //颜色
+        vx: 4,
+        vy: 0,
+        line_w: 4,
+        fx: "w",
+        width: 20, //线长
+        jiange: 8, //间隔
+      };
+      var res = new Createline(data);
+      res.begin("top", data);
+    }
+    f2();
+    function f2() {
+      var data = {
+        time: 60, //运动速度
+        mx: 0, //起点位置
+        my: 6,
+        ly: 6,
+        canvas_w: 580,
+        canvas_h: 10,
+        color: "#a84a0a", //颜色
+        vx: 4,
+        vy: 0,
+        line_w: 4,
+        fx: "w",
+        width: 20, //线长
+        jiange: 8, //间隔
+      };
+      var res = new Createline(data);
+      res.begin("bottom", data);
+    }
+    f3();
+    function f3() {
+      var data = {
+        time: 40, //运动速度
+        mx: 0, //起点位置
+        my: 6,
+        ly: 6,
+        canvas_w: 280,
+        canvas_h: 10,
+        color: "#2d2db4", //颜色
+        vx: 4,
+        vy: 0,
+        line_w: 4,
+        fx: "w",
+        width: 20, //线长
+        jiange: 8, //间隔
+      };
+      var res = new Createline(data);
+      res.begin("left", data);
+    }
+    f4();
+    function f4() {
+      var data = {
+        time: 100, //运动速度
+        mx: 0, //起点位置
+        my: 6,
+        ly: 6,
+        canvas_w: 280,
+        canvas_h: 10,
+        color: "#484a18", //颜色
+        vx: 4,
+        vy: 0,
+        line_w: 4,
+        fx: "w",
+        width: 20, //线长
+        jiange: 8, //间隔
+      };
+      var res = new Createline(data);
+      res.begin("right", data);
+    }
+  </script>
+</html>
