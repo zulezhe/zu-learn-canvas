@@ -1,0 +1,17 @@
+{
+  "name": "learn-anvas",
+  "version": "1.0.0",
+  "description": "<!--\r  * @Author: zulezhe\r  * @Date: 2021-01-13 14:43:17\r  * @LastEditors: wangchaoxu\r  * @LastEditTime: 2021-04-19 22:28:01\r  * @Description: In User Settings Edit\r  * @FilePath: \\canvas\\README.md\r -->",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "compile":""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitee.com:zulezhe/learn-anvas.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

@@ -2,99 +2,50 @@
  * @Author: zulezhe
  * @Date: 2021-01-20 19:14:13
  * @LastEditors: zulezhe
- * @LastEditTime: 2021-02-04 14:03:27
+ * @LastEditTime: 2021-05-08 18:22:01
  * @Description: In User Settings Edit
  * @FilePath: \canvas\index.html
 -->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>canvas学习demo</title>
-    <style>
-      html,
-      body {
-        width: 100%;
-        height: 100%;
-      }
-      * {
-        margin: 0;
-        padding: 0;
-      }
-      .content {
-        padding: 20px;
-      }
-      .content a {
-        display: block;
-        padding: 10px;
-        width: 200px;
-        height: 40px;
-        text-decoration: none;
-        outline: 1px dotted;
-      }
-      h1 {
-        margin-top: 30px;
-        margin-left: 20px;
-      }
-      h1 a {
-        height: 40px;
-        text-decoration: none;
-      }
-    </style>
-  </head>
-  <body>
-    <ul>
-      <li>
-        <h1 id="base-fold" class="handle-btn">
-          <a href="#">基础</a>
-        </h1>
-        <div class="content" id="base-fold-content" style="display: none">
-          <a href="./01-基本/01.绘制线.html">01.绘制线</a>
-          <a href="./01-基本/02.绘制矩形.html">02.绘制矩形</a>
-          <a href="./01-基本/03.文字绘制.html">03.文字绘制</a>
-          <a href="./01-基本/04.绘制圆.html">04.绘制圆</a>
-          <a href="./01-基本/05.绘制圆角矩形.html">05.绘制圆角矩形</a>
-          <a href="./01-基本/06.绘制安卓机器人.html">06.绘制安卓机器人</a>
-          <a href="./01-基本/07.绘制标尺.html">07.绘制标尺</a>
-          <a href="./01-基本/08.绘制箭头.html">08.绘制箭头</a>
-          <a href="./01-基本/09.绘制折线图.html">09.绘制折线图</a>
-          <a href="./01-基本/10.绘制饼图.html">10.绘制饼图</a>
-          <a href="./01-基本/11.绘制五角星.html">11.绘制五角星</a>
-          <a href="./01-基本/12.设置透明度.html">12.设置透明度</a>
-        </div>
-      </li>
-      <li>
-        <h1 id="up-fold" class="handle-btn">
-          <a href="#">进阶</a>
-        </h1>
-        <div class="content" id="up-fold-content" style="display: none">
-          <a href="./02-进阶/01.阴影.html">01.阴影</a>
-          <a href="./02-进阶/02.渐变.html">02.渐变</a>
-          <a href="./02-进阶/03.获取图像数据.html">03.获取图像数据</a>
-          <a href="./02-进阶/04.canvas变换.html">04.canvas变换</a>
-          <a href="./02-进阶/05.canvas动画.html">05.canvas动画</a>
-          <a href="./02-进阶/06.椭圆.html">06.椭圆</a>
-          <a href="./02-进阶/07.判断.html">07.判断</a>
-          <a href="./02-进阶/08.剪切clip.html">08.剪切clip</a>
-          <a href="./02-进阶/09.初识贝塞尔.html">09.初识贝塞尔</a>
-        </div>
-      </li>
-    </ul>
-    <script>
-      let btnList = ["base-fold", "up-fold"];
-      for (let i = 0; i < btnList.length; i++) {
-        const element = document.getElementById(btnList[i]);
-        element.addEventListener("click", function () {
-          if (document.getElementById(btnList[i] + "-content").style.display == "none") {
-            console.log("打开");
-            document.getElementById(btnList[i] + "-content").style.display = "block";
-          } else {
-            console.log("关闭");
-            document.getElementById(btnList[i] + "-content").style.display = "none";
-          }
-        });
-      }
-    </script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>canvas学习demo</title>
+  <style>
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .slide {
+      width: 300px;
+      height: 100%;
+      border: 1px solid red;
+      overflow-y: auto;
+    }
+
+    .preview {
+      width: calc(100% - 330px);
+      height: 100%;
+      border: 1px solid red;
+    }
+
+    .item {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="slide"></div>
+  <iframe src="" frameborder="0" class="preview"></iframe>
+</body>
+<script src="./index.js"></script>
+
 </html>
