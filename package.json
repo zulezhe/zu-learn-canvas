@@ -4,7 +4,7 @@
   "description": "zulezhe",
   "main": "app.js",
   "scripts": {
-    "dev": "node app.js",
+    "dev": "nodemon  app.js",
     "compile": "node compile.js"
   },
   "repository": {
@@ -15,6 +15,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "nodemon": "^2.0.7"
   }
 }

@@ -2,118 +2,124 @@
  * @Author: zulezhe
  * @Date: 2021-01-26 13:47:56
  * @LastEditors: zulezhe
- * @LastEditTime: 2021-02-22 15:59:52
+ * @LastEditTime: 2021-05-18 15:01:20
  * @Description: In User Settings Edit
  * @FilePath: \canvas\03-高级\刮刮乐.html
 -->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>刮刮乐</title>
-    <style>
-      .card {
-        position: relative;
-      }
-      .card .shade {
-        position: absolute;
-        top: 0;
-        left: 0;
-      }
-      canvas {
-        outline: 1px dashed red;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="card" id="card">
-      <canvas id="canvas"></canvas>
-    </div>
-    <script>
-      class Scratch {
-        constructor(id, width, height) {
-          this.canvas = document.getElementById("canvas");
-          this.canvas.width = width;
-          this.canvas.height = height;
-          this.ctx = this.canvas.getContext("2d");
-          this.drawContext();
-          this.drawShade();
-        }
-        drawContext() {
-          this.ctx.save();
-          this.ctx.beginPath();
-          this.ctx.font = "20px YaHei";
-          this.ctx.fillStyle = "red";
-          let textWidth = this.ctx.measureText("恭喜你,中奖5万亿!").width;
-          this.ctx.fillText("恭喜你,中奖5万亿!", (this.canvas.width - textWidth) / 2, this.canvas.height / 2);
-          this.ctx.fill();
-          this.ctx.restore();
-        }
-        drawShade(color = "#ccc") {
-          const canvas = document.createElement("canvas");
-          canvas.width = this.canvas.width;
-          canvas.height = this.canvas.height;
-          canvas.className = "shade";
-          document.getElementById("card").appendChild(canvas);
-          const ctx = canvas.getContext("2d");
-          ctx.beginPath();
-          ctx.fillStyle = color;
-          ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-          ctx.closePath();
-          this.ontouch(canvas, ctx);
-        }
-        ontouch(canvas, ctx) {
-          canvas.addEventListener("touchstart", (event) => {
-            console.log("开始");
-            ctx.save();
-            ctx.beginPath();
-            var touch = event.touches[0];
-            this.clearRound(ctx, touch.pageX, touch.pageY, 8);
-            ctx.restore();
-          });
-          canvas.addEventListener("touchmove", (event) => {
-            console.log("移动");
-            var touch = event.touches[0];
-            this.clearRound(ctx, touch.pageX, touch.pageY, 8);
-          });
-          canvas.addEventListener("touchend", (event) => {
-            console.log("结束");
-            this.clearAll(canvas, ctx);
-          });
-        }
-        clearRound(ctx, x, y, radius) {
-          for (let i = 0; i <= radius; i++) {
-            var calcWidth = radius - i;
-            var calcHeight = Math.sqrt(radius * radius - calcWidth * calcWidth);
-            var posX = x - calcWidth;
-            var posY = y - calcHeight;
-            var widthX = 2 * calcWidth;
-            var heightY = 2 * calcHeight;
-            ctx.clearRect(posX, posY, widthX, heightY);
-          }
-        }
-        clearAll(canvas, ctx) {
-          var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-          var allPx = imageData.width * imageData.height;
-          var visibleNum = 0; // 刮开的像素点个数
 
-          for (var i = 0; i < allPx; i++) {
-            if (imageData.data[i * 4 + 3] == 0) {
-              // imageData.data 里面是Uint8ClampedArray类型的一维数组 第四个数表示透明度 当这个值为0时 表示这个像素点变为透明了
-              visibleNum++;
-            }
-          }
-          if (visibleNum >= (allPx * 3) / 4) {
-            // 大于3/4 图层隐藏
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-          }
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>刮刮乐</title>
+  <style>
+    .card {
+      position: relative;
+    }
+
+    .card .shade {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    canvas {
+      outline: 1px dashed red;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card" id="card">
+    <canvas id="canvas"></canvas>
+  </div>
+  <script>
+    class Scratch {
+      constructor(id, width, height, text) {
+        this.canvas = document.getElementById("canvas");
+        this.canvas.width = width;
+        this.canvas.height = height;
+        this.text = text;
+        this.ctx = this.canvas.getContext("2d");
+        this.drawContext(text);
+        this.drawShade();
+      }
+      drawContext(text) {
+        this.ctx.save();
+        this.ctx.beginPath();
+        this.ctx.font = "20px YaHei";
+        this.ctx.fillStyle = "red";
+        let textWidth = this.ctx.measureText(text).width;
+        this.ctx.fillText(text, (this.canvas.width - textWidth) / 2, this.canvas.height / 2);
+        this.ctx.fill();
+        this.ctx.restore();
+      }
+      drawShade(color = "#ccc") {
+        const canvas = document.createElement("canvas");
+        canvas.width = this.canvas.width;
+        canvas.height = this.canvas.height;
+        canvas.className = "shade";
+        document.getElementById("card").appendChild(canvas);
+        const ctx = canvas.getContext("2d");
+        ctx.beginPath();
+        ctx.fillStyle = color;
+        ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        ctx.closePath();
+        this.ontouch(canvas, ctx);
+      }
+      ontouch(canvas, ctx) {
+        canvas.addEventListener("touchstart", (event) => {
+          console.log("开始");
+          ctx.save();
+          ctx.beginPath();
+          var touch = event.touches[0];
+          this.clearRound(ctx, touch.pageX, touch.pageY, 8);
+          ctx.restore();
+        });
+        canvas.addEventListener("touchmove", (event) => {
+          console.log("移动");
+          var touch = event.touches[0];
+          this.clearRound(ctx, touch.pageX, touch.pageY, 8);
+        });
+        canvas.addEventListener("touchend", (event) => {
+          console.log("结束");
+          this.clearAll(canvas, ctx);
+        });
+      }
+      clearRound(ctx, x, y, radius) {
+        for (let i = 0; i <= radius; i++) {
+          var calcWidth = radius - i;
+          var calcHeight = Math.sqrt(radius * radius - calcWidth * calcWidth);
+          var posX = x - calcWidth;
+          var posY = y - calcHeight;
+          var widthX = 2 * calcWidth;
+          var heightY = 2 * calcHeight;
+          ctx.clearRect(posX, posY, widthX, heightY);
         }
       }
-      window.onload = function () {
-        let scratch = new Scratch("canvas", 300, 100);
-      };
-    </script>
-  </body>
+      clearAll(canvas, ctx) {
+        var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        var allPx = imageData.width * imageData.height;
+        var visibleNum = 0; // 刮开的像素点个数
+
+        for (var i = 0; i < allPx; i++) {
+          if (imageData.data[i * 4 + 3] == 0) {
+            // imageData.data 里面是Uint8ClampedArray类型的一维数组 第四个数表示透明度 当这个值为0时 表示这个像素点变为透明了
+            visibleNum++;
+          }
+        }
+        if (visibleNum >= (allPx * 3) / 4) {
+          // 大于3/4 图层隐藏
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      }
+    }
+    window.onload = function () {
+      let scratch = new Scratch("canvas", 300, 100, "我是刮刮乐");
+    };
+  </script>
+</body>
+
 </html>

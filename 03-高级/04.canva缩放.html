@@ -1,0 +1,67 @@
+<!--
+ * @Author: zulezhe
+ * @Date: 2021-01-29 14:34:42
+ * @LastEditors: zulezhe
+ * @LastEditTime: 2021-05-20 09:03:28
+ * @Description: In User Settings Edit
+ * @FilePath: \canvas\03-高级\绘制地图.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>绘制地图</title>
+  <style>
+    #map {
+      outline: 1px dashed red;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="map"></canvas>
+  <script>
+    let canvas = document.getElementById('map')
+    let ctx = canvas.getContext('2d');
+    canvas.width = 500;
+    canvas.height = 500;
+
+    let obj = {
+      fontX: 0,
+      fontY: 0,
+      fontZoom: 1,
+      curZoom: 1,
+      translateX: 0,
+      translateY: 0,
+      draw() {
+        ctx.fillStyle = 'red';
+        ctx.fillRect(225, 225, 50, 50)
+      },
+      zoom(offsetX, offsetY, z) {
+        ctx.save()
+        ctx.clearRect(0, 0, 300, 300);
+        this.curZoom = this.fontZoom + z
+        this.translateX = offsetX - (offsetX - this.translateX) * this.curZoom / this.fontZoom
+        this.translateY = offsetY - (offsetY - this.translateY) * this.curZoom / this.fontZoom
+        ctx.translate(this.translateX, this.translateY)
+        ctx.scale(this.curZoom, this.curZoom);
+        this.draw()
+        ctx.restore()
+        this.fontY = offsetY
+        this.fontX = offsetX
+        this.fontZoom = this.curZoom
+      }
+    }
+    obj.draw()
+    document.getElementById('map').addEventListener('mousewheel', (e) => {
+      console.log('缩放');
+      let z = e.deltaY > 0 ? -0.1 : 0.1
+      obj.zoom(e.offsetX, e.offsetY, z)
+    })
+  </script>
+</body>
+
+</html>

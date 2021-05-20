@@ -2,7 +2,7 @@
  * @Author: zulezhe
  * @Date: 2021-05-08 16:54:00
  * @LastEditors: zulezhe
- * @LastEditTime: 2021-05-10 08:57:05
+ * @LastEditTime: 2021-05-20 09:06:02
  * @Path: https://gitee.com/zulezhe/
  * @Description: $
  */
@@ -36,5 +36,5 @@ list.map((item, i) => {
 });
 fs.writeFile('./template/menu.json', JSON.stringify(list), (err) => {
   if (err) throw err;
-  console.log('%o', '目录编译成功,请运行 npx yg-server 查看页面');
+  console.log('%o', '目录编译成功,请运行 npx dev 查看页面');
 });
