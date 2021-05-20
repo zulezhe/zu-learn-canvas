@@ -2,7 +2,7 @@
  * @Author: zulezhe
  * @Date: 2021-05-08 16:48:19
  * @LastEditors: zulezhe
- * @LastEditTime: 2021-05-08 16:49:08
+ * @LastEditTime: 2021-05-20 10:05:08
  * @Path: https://gitee.com/zulezhe/
  * @Description: $
  */
@@ -45,11 +45,32 @@
       for (let i = 0; i < itemList.length; i++) {
         const item = itemList[i];
         item.onclick = function (e) {
-          console.log(this.getAttribute('data-link'));
+          removeClass(itemList, 'active');
+          addCookie('activeItem', i);
+          this.classList.add('active');
           iframe.src = this.getAttribute('data-link');
           e.stopPropagation();
           return false;
         };
       }
+      let index = getCookie('activeItem');
+      index ? itemList[index].click() : itemList[0].click();
     });
+  function removeClass(itemList, className) {
+    for (let i = 0; i < itemList.length; i++) {
+      const item = itemList[i];
+      item.classList.remove(className);
+    }
+  }
+  function addCookie(key, value) {
+    document.cookie = key + '=' + value;
+  }
+  function getCookie(key) {
+    var arr = document.cookie.match(new RegExp('(^| )' + key + '=([^;]*)(;|$)'));
+    if (arr != null) {
+      console.log(arr);
+      return unescape(arr[2]);
+    }
+    return null;
+  }
 })();
