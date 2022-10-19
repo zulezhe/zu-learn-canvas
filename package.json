@@ -1,7 +1,7 @@
 {
-  "name": "learn-anvas",
+  "name": "zu-learn-anvas",
   "version": "1.0.0",
-  "description": "zulezhe",
+  "description": "学习canvas知识",
   "main": "app.js",
   "scripts": {
     "dev": "nodemon  app.js",
@@ -12,8 +12,8 @@
     "url": "git@gitee.com:zulezhe/learn-anvas.git"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "zulezhe",
+  "license": "MIT",
   "dependencies": {
     "express": "^4.17.1",
     "nodemon": "^2.0.7"
